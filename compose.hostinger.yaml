@@ -1,0 +1,12 @@
+services:
+  linking:
+    environment:
+      BROKER_ORIGIN: https://alexa.evoll.app
+    networks:
+      proxy:
+        aliases:
+          - evoll-alexa-linking
+networks:
+  proxy:
+    external: true
+    name: nginx_network

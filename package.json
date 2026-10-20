@@ -1,0 +1,24 @@
+{
+  "name": "evoll-alexa",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Skill de Alexa conectada al agente de Evoll en Supabase",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node scripts/build.mjs && node --test",
+    "build": "node scripts/build.mjs",
+    "start:broker": "node broker/server.js",
+    "package": "npm run build && python3 scripts/package.py"
+  },
+  "dependencies": {
+    "ask-sdk-core": "2.14.0",
+    "ask-sdk-model": "1.86.0",
+    "@supabase/supabase-js": "2.118.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

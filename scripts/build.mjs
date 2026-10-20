@@ -1,0 +1,10 @@
+import {build} from 'esbuild';
+import {mkdir,cp,writeFile} from 'node:fs/promises';
+await mkdir('dist/lambda',{recursive:true});
+await mkdir('dist/linking',{recursive:true});
+await build({entryPoints:['src/index.js'],bundle:true,platform:'node',target:'node22',outfile:'dist/lambda/index.js'});
+await build({entryPoints:['linking/app.js'],bundle:true,platform:'browser',target:'es2020',outfile:'dist/linking/app.js',minify:true});
+await cp('linking/index.html','dist/linking/index.html');
+await cp('skill-package','dist/skill-package',{recursive:true});
+await writeFile('dist/lambda/package.json',JSON.stringify({type:'commonjs',main:'index.js'}));
+console.log('Built dist/lambda, dist/linking and dist/skill-package');

@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>Vincular Evoll con Alexa</title></head>
+<body><main><h1>Vincular Evoll con Alexa</h1>
+<p>Autoriza a Alexa a consultar tu agente de Evoll. Las respuestas pueden escucharse en el altavoz.</p>
+<p id="status" role="status">Comprobando solicitud…</p>
+<form id="login" hidden><label>Correo <input id="email" type="email" autocomplete="username" required></label><label>Contraseña de Evoll <input id="password" type="password" autocomplete="current-password" required></label><button>Entrar en Evoll</button></form>
+<section id="consent" hidden><p id="details"></p><p>Esta conexión usa tus permisos de Evoll. El agente puede leer tus datos y gestionar su memoria; las propuestas de gastos y otras acciones no se guardan desde Alexa.</p><button id="approve">Autorizar</button><button id="deny">Cancelar</button></section>
+</main><script src="app.js" defer></script></body></html>
