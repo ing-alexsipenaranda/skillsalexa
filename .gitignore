@@ -5,3 +5,6 @@ dist/
 !.env.example
 .ask/
 !.env.compose.example
+
+__pycache__/
+*.pyc
