@@ -28,7 +28,22 @@ class Api:
                 raw = response.read()
                 return json.loads(raw) if raw else None
         except urllib.error.HTTPError as error:
-            raise RuntimeError(f'API {method} {path}: HTTP {error.code}. Revisa el panel o los registros de Nginx Proxy Manager; no compartas tokens.') from None
+            # Classify known responses, never echo API bodies or submitted credentials.
+            hint = ''
+            try:
+                payload = json.loads(error.read(16384))
+                detail = payload.get('error', {})
+                message = (detail.get('message', '') if isinstance(detail, dict) else str(detail)).lower()
+                if path == '/tokens':
+                    if any(term in message for term in ['invalid email or password', 'invalid credentials', 'invalid identity or password']):
+                        hint = ' El panel rechazó el correo o la contraseña. Usa las credenciales del panel, no las de SSH.'
+                    elif 'disabled' in message:
+                        hint = ' La cuenta del panel está deshabilitada.'
+                    elif any(term in message for term in ['required', 'validation', 'schema', 'short', 'minlength']):
+                        hint = ' La API rechazó el formato de los campos de acceso; revisa que correo y contraseña estén completos.'
+            except (ValueError, TypeError, AttributeError):
+                pass
+            raise RuntimeError(f'API {method} {path}: HTTP {error.code}.' + hint + ' No se muestran datos sensibles de la respuesta.') from None
 
 
 def main():
