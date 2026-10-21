@@ -16,9 +16,11 @@ function link(h) {
   return h.responseBuilder.speak('Para consultar tus datos, vincula tu cuenta de Evoll desde la tarjeta en la app Alexa.')
     .withLinkAccountCard().withShouldEndSession(true).getResponse();
 }
-function createSkill({skillId, agent}) {
-  if (!skillId) throw new Error('ALEXA_SKILL_ID is required');
-  return Alexa.SkillBuilders.custom().withSkillId(skillId).addRequestHandlers(
+function createSkill({skillId, agent, verifySkillId = true}) {
+  if (verifySkillId && !skillId) throw new Error('ALEXA_SKILL_ID is required');
+  const builder = Alexa.SkillBuilders.custom();
+  if (skillId) builder.withSkillId(skillId);
+  return builder.addRequestHandlers(
     {canHandle:h => Alexa.getRequestType(h.requestEnvelope) === 'LaunchRequest', handle:h => {
       if (!h.requestEnvelope.context?.System?.user?.accessToken) return link(h);
       return say(h, 'Bienvenido a Evoll. Puedes consultar gastos, metas, deudas, tareas y notas. Di pregunta, seguido de tu consulta.');

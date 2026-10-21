@@ -1,5 +1,6 @@
 """Package only explicitly listed deployable files. Never include local secrets."""
 from pathlib import Path
+import shutil
 import tarfile
 import zipfile
 root = Path(__file__).resolve().parent.parent
@@ -7,6 +8,12 @@ with zipfile.ZipFile(root / 'dist/evoll-lambda.zip', 'w', zipfile.ZIP_DEFLATED) 
     for path in sorted((root / 'dist/lambda').iterdir()):
         if path.is_file():
             archive.write(path, path.name)
+with zipfile.ZipFile(root / 'dist/evoll-alexa-hosted.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+    for path in sorted((root / 'dist/alexa-hosted/lambda').iterdir()):
+        if path.is_file():
+            archive.write(path, 'lambda/' + path.name)
+(root / 'downloads').mkdir(exist_ok=True)
+shutil.copyfile(root / 'dist/evoll-alexa-hosted.zip', root / 'downloads/evoll-alexa-hosted.zip')
 with tarfile.open(root / 'dist/evoll-linking.tar.gz', 'w:gz') as archive:
     for name in ['broker/server.js', 'broker/store.js', 'broker/revoke.js',
                  'broker/.env.example', 'package.json', 'package-lock.json',

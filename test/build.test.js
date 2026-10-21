@@ -16,6 +16,20 @@ test('bundled Lambda executes an authenticated agent request',async()=>{
     assert.match(out.response.outputSpeech.ssml,/tres tareas/);
   }finally{global.fetch=originalFetch;if(originalId===undefined)delete process.env.ALEXA_SKILL_ID;else process.env.ALEXA_SKILL_ID=originalId;}
 });
+test('Alexa-hosted bundle runs without ALEXA_SKILL_ID',async()=>{
+  const originalFetch=global.fetch, originalId=process.env.ALEXA_SKILL_ID;
+  delete process.env.ALEXA_SKILL_ID;
+  global.fetch=async()=>Response.json({reply:'Respuesta desde Evoll.',actions:[]});
+  try {
+    const {handler}=require('../dist/alexa-hosted/lambda');
+    const id='amzn1.ask.skill.hosted-test';
+    const out=await handler({version:'1.0',session:{new:true,sessionId:'session',application:{applicationId:id},user:{userId:'user'}},context:{System:{application:{applicationId:id},user:{userId:'user',accessToken:'linked-token'},device:{deviceId:'device',supportedInterfaces:{}}}},request:{type:'IntentRequest',requestId:'request',timestamp:new Date().toISOString(),locale:'es-ES',intent:{name:'AskEvollIntent',slots:{question:{name:'question',value:'qué tareas tengo'}}}}});
+    assert.match(out.response.outputSpeech.ssml,/Respuesta desde Evoll/);
+  }finally{
+    global.fetch=originalFetch;
+    if(originalId===undefined)delete process.env.ALEXA_SKILL_ID;else process.env.ALEXA_SKILL_ID=originalId;
+  }
+});
 test('built linking page signs in directly to Supabase and sends only refresh token to broker',async()=>{
   const nodes={};for(const name of ['status','details','login','consent','email','password','approve','deny'])nodes[name]={hidden:true,textContent:'',value:'',listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}};
   const requests=[],redirects=[];

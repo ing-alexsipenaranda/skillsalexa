@@ -64,6 +64,10 @@ Estos tests no sustituyen una prueba con una cuenta y un dispositivo reales.
 Artefactos:
 
 - `dist/evoll-lambda.zip`: handler autónomo `index.handler`, sin instalar deps en Lambda.
+- `dist/evoll-alexa-hosted.zip`: importación directa para **Alexa-hosted (Node.js)**;
+  contiene la carpeta `lambda/` exigida por la consola y no incluye secretos.
+  Una copia versionada para descargar desde GitHub queda en
+  `downloads/evoll-alexa-hosted.zip`.
 - `dist/evoll-linking.tar.gz`: puente y página de login, sin credenciales.
 - `dist/evoll-docker.tar.gz`: contexto Docker completo para el VPS, sin credenciales.
 - `dist/skill-package/interactionModels/custom/{es-ES,es-MX}.json`: modelos para Amazon.
