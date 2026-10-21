@@ -14,9 +14,10 @@
     "package": "npm run build && python3 scripts/package.py"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.118.0",
     "ask-sdk-core": "2.14.0",
     "ask-sdk-model": "1.86.0",
-    "@supabase/supabase-js": "2.118.0"
+    "node-fetch": "2.7.0"
   },
   "devDependencies": {
     "esbuild": "0.28.2"

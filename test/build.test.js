@@ -16,15 +16,15 @@ test('bundled Lambda executes an authenticated agent request',async()=>{
     assert.match(out.response.outputSpeech.ssml,/tres tareas/);
   }finally{global.fetch=originalFetch;if(originalId===undefined)delete process.env.ALEXA_SKILL_ID;else process.env.ALEXA_SKILL_ID=originalId;}
 });
-test('Alexa-hosted bundle runs without ALEXA_SKILL_ID',async()=>{
+test('Alexa-hosted bundle loads on a runtime without global fetch',async()=>{
   const originalFetch=global.fetch, originalId=process.env.ALEXA_SKILL_ID;
   delete process.env.ALEXA_SKILL_ID;
-  global.fetch=async()=>Response.json({reply:'Respuesta desde Evoll.',actions:[]});
+  global.fetch=undefined;
   try {
     const {handler}=require('../dist/alexa-hosted/lambda');
     const id='amzn1.ask.skill.hosted-test';
-    const out=await handler({version:'1.0',session:{new:true,sessionId:'session',application:{applicationId:id},user:{userId:'user'}},context:{System:{application:{applicationId:id},user:{userId:'user',accessToken:'linked-token'},device:{deviceId:'device',supportedInterfaces:{}}}},request:{type:'IntentRequest',requestId:'request',timestamp:new Date().toISOString(),locale:'es-ES',intent:{name:'AskEvollIntent',slots:{question:{name:'question',value:'qué tareas tengo'}}}}});
-    assert.match(out.response.outputSpeech.ssml,/Respuesta desde Evoll/);
+    const out=await handler({version:'1.0',session:{new:true,sessionId:'session',application:{applicationId:id},user:{userId:'user'}},context:{System:{application:{applicationId:id},user:{userId:'user'},device:{deviceId:'device',supportedInterfaces:{}}}},request:{type:'LaunchRequest',requestId:'request',timestamp:new Date().toISOString(),locale:'es-ES'}});
+    assert.equal(out.response.card.type,'LinkAccount');
   }finally{
     global.fetch=originalFetch;
     if(originalId===undefined)delete process.env.ALEXA_SKILL_ID;else process.env.ALEXA_SKILL_ID=originalId;

@@ -4,7 +4,7 @@ await mkdir('dist/lambda',{recursive:true});
 await mkdir('dist/alexa-hosted/lambda',{recursive:true});
 await mkdir('dist/linking',{recursive:true});
 await build({entryPoints:['src/index.js'],bundle:true,platform:'node',target:'node22',outfile:'dist/lambda/index.js'});
-await build({entryPoints:['src/hosted.js'],bundle:true,platform:'node',target:'node18',outfile:'dist/alexa-hosted/lambda/index.js'});
+await build({entryPoints:['src/hosted.js'],bundle:true,platform:'node',target:'node16',outfile:'dist/alexa-hosted/lambda/index.js'});
 await build({entryPoints:['linking/app.js'],bundle:true,platform:'browser',target:'es2020',outfile:'dist/linking/app.js',minify:true});
 await cp('linking/index.html','dist/linking/index.html');
 await cp('skill-package','dist/skill-package',{recursive:true});

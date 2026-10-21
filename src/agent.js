@@ -9,19 +9,22 @@ function validateUrl(value) {
   }
   return url.origin;
 }
-function createAgent({url, provider, fetchImpl = fetch, timeoutMs = 5500}) {
+function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5500}) {
   const origin = validateUrl(url);
   if (provider && !['openai', 'anthropic'].includes(provider)) throw new Error('Invalid AGENT_PROVIDER');
   return async (message, token) => {
     if (!token) throw new AgentError('unauthorized');
     let res;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
       res = await fetchImpl(`${origin}/functions/v1/agent`, {
-        method:'POST', redirect:'error', signal:AbortSignal.timeout(timeoutMs),
+        method:'POST', redirect:'error', signal:controller.signal,
         headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json'},
         body:JSON.stringify({message, language:'es', ...(provider ? {provider} : {})})
       });
     } catch { throw new AgentError('unavailable'); }
+    finally { clearTimeout(timeout); }
     if (res.status === 401 || res.status === 403) throw new AgentError('unauthorized');
     if (res.status === 429) throw new AgentError('quota');
     if (!res.ok) throw new AgentError('unavailable');
