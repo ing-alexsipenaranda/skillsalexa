@@ -3,18 +3,17 @@
 Skill personal en español para consultar el agente existente de Evoll/LifeOs.
 No requiere una versión web de la app móvil ni cambios en LifeOs.
 
-**Estado:** implementación y pruebas locales completas; sin despliegue en Amazon,
-sin vinculación real y sin pruebas en un Echo. La llamada real sin autenticación
-al agente respondió 401 el 20 de octubre de 2026, confirmando conectividad y
-protección de acceso, no una consulta autenticada.
+**Estado:** backend de vinculación desplegado en `https://alexa.evoll.app`,
+health checks interno y HTTPS correctos, skill desplegada y funcionando en el
+simulador de Alexa. Quedan la vinculación real de la cuenta desde la app Alexa y
+la prueba en un Echo físico.
 
 ## Qué hace
 
-Ejemplo: **«Alexa, abre mi evol»**, después **«pregunta cuánto gasté este mes»**.
-El modelo también admite «Alexa, pregunta a mi evol cuáles son mis tareas»
-según cómo Alexa reconozca la invocación. El nombre de invocación configurado
-es **mi evol** (es-ES y es-MX); su aceptación y reconocimiento se deben verificar
-al compilar el modelo en Amazon.
+Ejemplo: **«Alexa, abre asistente evol»**, después **«pregunta cuánto gasté este
+mes»**. El nombre de invocación configurado es **asistente evol** en Español de
+España (`es-ES`), México (`es-MX`) y Estados Unidos (`es-US`). El idioma habilitado
+en la skill debe coincidir con el idioma configurado en el Echo.
 
 Reutiliza las capacidades del agente de LifeOs: gastos/ingresos, presupuestos,
 movimientos, metas, deudas, tareas, próximos compromisos, notas y vestuario.
@@ -70,9 +69,9 @@ Artefactos:
   `downloads/evoll-alexa-hosted.zip`.
 - `dist/evoll-linking.tar.gz`: puente y página de login, sin credenciales.
 - `dist/evoll-docker.tar.gz`: contexto Docker completo para el VPS, sin credenciales.
-- `dist/skill-package/interactionModels/custom/{es-ES,es-MX}.json`: modelos para Amazon.
+- `dist/skill-package/interactionModels/custom/{es-ES,es-MX,es-US}.json`: modelos para Amazon.
 
-## Despliegue: lo que falta configurar una vez
+## Configuración y operación
 
 ### 1. Crear la skill y el endpoint en Amazon
 
@@ -204,16 +203,12 @@ Este servidor está preparado para una instancia personal con SQLite. Antes de
 un despliegue multiusuario público se necesita evaluar escala, protección de
 tráfico y operación de secretos. No es un proveedor OAuth certificado.
 
-## Accesos pendientes en esta sesión
+## Pendiente de validación
 
-- Amazon Developer: no hay perfil ASK configurado.
-- AWS: los archivos de configuración/credenciales presentes no contienen perfiles.
-- Puente: falta elegir un alojamiento HTTPS y su dominio, además de configurar
-  la clave pública de Supabase y los secretos del servicio de forma privada.
-- La prueba real autenticada y la prueba en Echo permanecen pendientes.
-
-La autorización de red hacia Supabase ya permite alcanzar el agente, pero no
-concede autorización para entrar en Amazon ni para desplegar recursos AWS.
+- Habilitar en Amazon el idioma exacto configurado en el Echo.
+- Confirmar que la app Alexa usa la misma cuenta de Amazon Developer.
+- Vincular una cuenta real de Evoll desde la tarjeta de la skill.
+- Probar consultas autenticadas de tareas y gastos en un Echo físico.
 
 ## Docker en un VPS (Hostinger u otro proveedor)
 

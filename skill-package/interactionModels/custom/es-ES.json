@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "mi evol",
+      "invocationName": "asistente evol",
       "intents": [
         {"name":"AskEvollIntent","slots":[{"name":"question","type":"AMAZON.SearchQuery"}],"samples":["pregunta {question}","consulta {question}","dime {question}","quiero saber {question}"]},
         {"name":"AMAZON.HelpIntent","samples":[]},
