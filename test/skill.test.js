@@ -22,7 +22,7 @@ test('complete SDK to HTTP adapter path forwards user token and question',async(
   const agent=createAgent({url:'https://melhdrdiesgeotzhkazg.supabase.co',fetchImpl:async(url,options)=>{
     assert.equal(url,'https://melhdrdiesgeotzhkazg.supabase.co/functions/v1/agent');
     assert.equal(options.headers.Authorization,'Bearer user-token');
-    assert.deepEqual(JSON.parse(options.body),{message:'cuánto gasté este mes',language:'es'});
+    assert.deepEqual(JSON.parse(options.body),{message:'cuánto gasté este mes',language:'es',channel:'alexa'});
     assert.equal(options.redirect,'error');called=true;
     return Response.json({reply:'Gastaste **20.000** pesos <hoy> & ayer.',actions:[]});
   }});
