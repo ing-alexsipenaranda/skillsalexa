@@ -14,7 +14,8 @@ la prueba en un Echo físico.
 
 Ejemplo: **«Alexa, abre asistente evol»**, después **«pregunta cuánto gasté este
 mes»**. El nombre de invocación configurado es **asistente evol** en Español de
-España (`es-ES`), México (`es-MX`) y Estados Unidos (`es-US`). El idioma habilitado
+España (`es-ES`), México (`es-MX`) y Estados Unidos (`es-US`). En Inglés de
+Estados Unidos (`en-US`) se invoca con **evoll assistant**. El idioma habilitado
 en la skill debe coincidir con el idioma configurado en el Echo.
 
 Reutiliza las capacidades del agente de LifeOs: gastos/ingresos, presupuestos,
@@ -71,7 +72,7 @@ Artefactos:
   `downloads/evoll-alexa-hosted.zip`.
 - `dist/evoll-linking.tar.gz`: puente y página de login, sin credenciales.
 - `dist/evoll-docker.tar.gz`: contexto Docker completo para el VPS, sin credenciales.
-- `dist/skill-package/interactionModels/custom/{es-ES,es-MX,es-US}.json`: modelos para Amazon.
+- `dist/skill-package/interactionModels/custom/{es-ES,es-MX,es-US,en-US}.json`: modelos para Amazon.
 
 ## Configuración y operación
 

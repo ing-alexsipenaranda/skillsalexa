@@ -1,0 +1,22 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "evoll assistant",
+      "intents": [
+        {"name":"AskEvollIntent","slots":[{"name":"question","type":"AMAZON.SearchQuery"}],"samples":["ask {question}","tell me {question}","I want to know {question}"]},
+        {"name":"TasksIntent","slots":[],"samples":["what are my tasks","tell me my tasks","what is pending"]},
+        {"name":"SpendingIntent","slots":[],"samples":["how much did I spend this month","tell me my spending","spending summary"]},
+        {"name":"DailySummaryIntent","slots":[],"samples":["give me my daily summary","today's summary","what do I have today"]},
+        {"name":"MoreDetailsIntent","slots":[],"samples":["give me more details","expand the answer","tell me more"]},
+        {"name":"EnablePrivateModeIntent","slots":[],"samples":["enable private mode","private mode","protect my data"]},
+        {"name":"DisablePrivateModeIntent","slots":[],"samples":["disable private mode","exit private mode","you can read my data"]},
+        {"name":"AMAZON.RepeatIntent","samples":[]},
+        {"name":"AMAZON.HelpIntent","samples":[]},
+        {"name":"AMAZON.StopIntent","samples":[]},
+        {"name":"AMAZON.CancelIntent","samples":[]},
+        {"name":"AMAZON.FallbackIntent","samples":[]}
+      ],
+      "types": []
+    }
+  }
+}

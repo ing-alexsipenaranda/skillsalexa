@@ -12,7 +12,7 @@ function validateUrl(value) {
 function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5500}) {
   const origin = validateUrl(url);
   if (provider && !['openai', 'anthropic'].includes(provider)) throw new Error('Invalid AGENT_PROVIDER');
-  return async (message, token) => {
+  return async (message, token, language = 'es') => {
     if (!token) throw new AgentError('unauthorized');
     let res;
     const controller = new AbortController();
@@ -21,7 +21,7 @@ function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5
       res = await fetchImpl(`${origin}/functions/v1/agent`, {
         method:'POST', redirect:'error', signal:controller.signal,
         headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json'},
-        body:JSON.stringify({message, language:'es', ...(provider ? {provider} : {})})
+        body:JSON.stringify({message, language:language === 'en' ? 'en' : 'es', ...(provider ? {provider} : {})})
       });
     } catch { throw new AgentError('unavailable'); }
     finally { clearTimeout(timeout); }

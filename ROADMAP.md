@@ -10,6 +10,7 @@ está desplegado.
 - [x] Backend OAuth disponible por HTTPS en `alexa.evoll.app`.
 - [x] Health checks interno y público correctos.
 - [x] Modelos para `es-ES`, `es-MX` y `es-US` con invocación `asistente evol`.
+- [x] Modelo `en-US`, respuestas internas en inglés y consultas bilingües al agente.
 - [x] Conexión de la Lambda con el agente de LifeOs/Supabase.
 - [ ] Skill visible y cuenta vinculada desde la app Alexa.
 - [ ] Prueba autenticada en un Echo físico.
@@ -46,10 +47,11 @@ contenedor y ninguna credencial aparece en repositorio o logs.
 
 ## Etapa 3 — Mejor experiencia de voz
 
-- [ ] Respuestas breves por defecto, con opción «dame más detalles».
-- [ ] Ayuda contextual y ejemplos según el módulo consultado.
-- [ ] Soportar «repite», «sí», «no» y preguntas consecutivas con contexto corto.
-- [ ] Diferenciar claramente cuenta sin vincular, sesión vencida, límite y caída
+- [x] Respuestas rápidas para tareas, gastos y resumen diario, con opción «dame más detalles».
+- [x] Ayuda contextual con ejemplos en español e inglés.
+- [x] Soportar «repite» y continuación mediante «más detalles» con contexto corto.
+- [ ] Soportar «sí» y «no» para confirmaciones seguras.
+- [x] Diferenciar claramente cuenta sin vincular, sesión vencida, límite y caída
   temporal del agente.
 - [ ] Añadir tarjetas útiles para Echo Show sin mostrar información sensible de más.
 - [ ] Medir duración de las consultas y reducir las que se acerquen al timeout.
@@ -59,7 +61,8 @@ se corta y el usuario entiende cómo continuar ante cualquier error.
 
 ## Etapa 4 — Privacidad en el hogar
 
-- [ ] Permitir ocultar saldos y movimientos detallados por configuración.
+- [x] Modo privado por sesión que bloquea consultas financieras sensibles.
+- [ ] Permitir ocultar saldos y movimientos detallados mediante una preferencia persistente.
 - [ ] Evaluar un PIN de voz para consultas financieras sensibles.
 - [ ] Añadir aviso claro sobre respuestas audibles por personas cercanas.
 - [ ] Definir qué módulos puede consultar Alexa desde preferencias de Evoll.
@@ -69,8 +72,9 @@ sensibles requieren la protección elegida.
 
 ## Etapa 5 — Funciones nuevas
 
-- [ ] Resumen diario: tareas, agenda, metas y alertas financieras.
-- [ ] Consultas rápidas dedicadas para tareas, gastos, presupuesto y deudas.
+- [x] Resumen diario bajo demanda: tareas, agenda, metas y alertas financieras.
+- [x] Consultas rápidas dedicadas para tareas y gastos.
+- [ ] Consultas rápidas dedicadas para presupuesto y deudas.
 - [ ] Recordatorios de Alexa para compromisos seleccionados por el usuario.
 - [ ] Acciones de escritura con confirmación explícita, idempotencia y auditoría.
 - [ ] Sincronizar preferencias de voz con la aplicación Evoll.

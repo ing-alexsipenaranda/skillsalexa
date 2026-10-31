@@ -4,6 +4,13 @@
       "invocationName": "asistente evol",
       "intents": [
         {"name":"AskEvollIntent","slots":[{"name":"question","type":"AMAZON.SearchQuery"}],"samples":["pregunta {question}","consulta {question}","dime {question}","quiero saber {question}"]},
+        {"name":"TasksIntent","slots":[],"samples":["cuáles son mis tareas","dime mis tareas","qué tengo pendiente"]},
+        {"name":"SpendingIntent","slots":[],"samples":["cuánto gasté este mes","dime mis gastos","resumen de gastos"]},
+        {"name":"DailySummaryIntent","slots":[],"samples":["dame mi resumen diario","resumen de hoy","qué tengo para hoy"]},
+        {"name":"MoreDetailsIntent","slots":[],"samples":["dame más detalles","amplía la respuesta","cuéntame más"]},
+        {"name":"EnablePrivateModeIntent","slots":[],"samples":["activa el modo privado","modo privado","protege mis datos"]},
+        {"name":"DisablePrivateModeIntent","slots":[],"samples":["desactiva el modo privado","sal del modo privado","puedes leer mis datos"]},
+        {"name":"AMAZON.RepeatIntent","samples":[]},
         {"name":"AMAZON.HelpIntent","samples":[]},
         {"name":"AMAZON.StopIntent","samples":[]},
         {"name":"AMAZON.CancelIntent","samples":[]},

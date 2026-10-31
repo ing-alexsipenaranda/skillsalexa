@@ -3,10 +3,10 @@ const assert = require('node:assert/strict');
 const {createSkill}=require('../src');
 const {createAgent}=require('../src/agent');
 const skillId='amzn1.ask.skill.test';
-function request({type='IntentRequest',intent='AskEvollIntent',question='cuánto gasté este mes',token='user-token',id=skillId}={}) {
-  return {version:'1.0',session:{new:true,sessionId:'test-session',application:{applicationId:id},user:{userId:'test-user'},attributes:{}},
+function request({type='IntentRequest',intent='AskEvollIntent',question='cuánto gasté este mes',token='user-token',id=skillId,locale='es-ES',attributes={}}={}) {
+  return {version:'1.0',session:{new:true,sessionId:'test-session',application:{applicationId:id},user:{userId:'test-user'},attributes},
     context:{System:{application:{applicationId:id},user:{userId:'test-user',...(token?{accessToken:token}:{})},device:{deviceId:'test-device',supportedInterfaces:{}}}},
-    request:{type,requestId:'test-request',timestamp:new Date().toISOString(),locale:'es-ES',...(type==='IntentRequest'?{intent:{name:intent,slots:question?{question:{name:'question',value:question}}:{}}}:{})}};
+    request:{type,requestId:'test-request',timestamp:new Date().toISOString(),locale,...(type==='IntentRequest'?{intent:{name:intent,slots:question?{question:{name:'question',value:question}}:{}}}:{})}};
 }
 function skill(agent) {return createSkill({skillId,agent});}
 test('no token: linking card and no backend request',async()=>{
@@ -49,6 +49,37 @@ test('missing question is clarified',async()=>{
 });
 test('stop ends the session',async()=>{
   const out=await skill(()=>{}).invoke(request({intent:'AMAZON.StopIntent'}));assert.equal(out.response.shouldEndSession,true);
+});
+test('English locale uses English speech and agent language',async()=>{
+  let language;
+  const out=await skill(async(_question,_token,lang)=>{language=lang;return{reply:'You have two tasks.'};})
+    .invoke(request({intent:'TasksIntent',question:null,locale:'en-US'}));
+  assert.equal(language,'en');
+  assert.match(out.response.outputSpeech.ssml,/two tasks/);
+  assert.match(out.response.reprompt.outputSpeech.ssml,/daily summary/);
+});
+test('daily summary uses the dedicated prompt',async()=>{
+  let question;
+  await skill(async(q)=>{question=q;return{reply:'Resumen listo.'};})
+    .invoke(request({intent:'DailySummaryIntent',question:null}));
+  assert.match(question,/resumen breve de hoy/);
+});
+test('private mode blocks financial speech without calling the agent',async()=>{
+  const out=await skill(()=>{throw Error('must not call');})
+    .invoke(request({intent:'SpendingIntent',question:null,attributes:{privateMode:true}}));
+  assert.match(out.response.outputSpeech.ssml,/modo privado está activo/);
+});
+test('more details continues the previous question',async()=>{
+  let question;
+  await skill(async(q)=>{question=q;return{reply:'Más información.'};})
+    .invoke(request({intent:'MoreDetailsIntent',question:null,attributes:{lastQuestion:'Cuáles son mis tareas'}}));
+  assert.match(question,/Cuáles son mis tareas/);
+  assert.match(question,/Amplía/);
+});
+test('repeat returns the previous response',async()=>{
+  const out=await skill(()=>{throw Error('must not call');})
+    .invoke(request({intent:'AMAZON.RepeatIntent',question:null,attributes:{lastSpeech:'Tienes tres tareas.'}}));
+  assert.match(out.response.outputSpeech.ssml,/Tienes tres tareas/);
 });
 test('malformed agent output is rejected',async()=>{
   const agent=createAgent({url:'https://example.supabase.co',fetchImpl:async()=>Response.json({actions:[]})});
