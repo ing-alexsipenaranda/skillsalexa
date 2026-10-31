@@ -1,5 +1,7 @@
 # Evoll para Alexa
 
+El trabajo pendiente y sus criterios de aceptación están en [ROADMAP.md](ROADMAP.md).
+
 Skill personal en español para consultar el agente existente de Evoll/LifeOs.
 No requiere una versión web de la app móvil ni cambios en LifeOs.
 
