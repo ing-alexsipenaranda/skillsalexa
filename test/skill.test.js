@@ -81,6 +81,21 @@ test('repeat returns the previous response',async()=>{
     .invoke(request({intent:'AMAZON.RepeatIntent',question:null,attributes:{lastSpeech:'Tienes tres tareas.'}}));
   assert.match(out.response.outputSpeech.ssml,/Tienes tres tareas/);
 });
+test('conversation history is forwarded and kept to four turns',async()=>{
+  let received;
+  const history=[{role:'user',content:'uno'},{role:'assistant',content:'dos'}];
+  const out=await skill(async(_q,_t,_l,h)=>{received=h;return{reply:'Continuación',alexa:{privateMode:false}};})
+    .invoke(request({question:'y mañana',attributes:{conversation:history}}));
+  assert.deepEqual(received,history);
+  assert.equal(out.sessionAttributes.conversation.length,4);
+  assert.equal(out.response.card.type,'Simple');
+});
+test('persistent private mode omits display card and clears conversation history',async()=>{
+  const out=await skill(async()=>({reply:'Respuesta privada',alexa:{privateMode:true}}))
+    .invoke(request({question:'mis datos',attributes:{conversation:[{role:'user',content:'anterior'}]}}));
+  assert.equal(out.response.card,undefined);
+  assert.equal(out.sessionAttributes.conversation,undefined);
+});
 test('malformed agent output is rejected',async()=>{
   const agent=createAgent({url:'https://example.supabase.co',fetchImpl:async()=>Response.json({actions:[]})});
   await assert.rejects(agent('hola','token'),{kind:'unavailable'});

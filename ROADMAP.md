@@ -35,9 +35,10 @@ usuario vinculado y otra cuenta no puede leerlos.
   la instalación y configurar acceso SSH con clave.
 - [ ] Verificar que el secreto OAuth y la clave de cifrado actuales no sean los
   valores que aparecieron en el chat.
-- [ ] Automatizar un backup cifrado diario de la base SQLite del broker y probar
+- [x] Automatizar un backup consistente de la base SQLite del broker y probar
   una restauración.
-- [ ] Añadir health check de Docker y alerta cuando `alexa.evoll.app/health` falle.
+- [x] Añadir health checks de Docker y HTTPS utilizables desde cron o monitoreo.
+- [ ] Conectar el health check a un canal externo de alertas.
 - [ ] Definir actualización segura del contenedor con rollback.
 - [ ] Revisar logs para garantizar que nunca registren tokens, contraseñas,
   cookies ni parámetros OAuth.
@@ -50,10 +51,11 @@ contenedor y ninguna credencial aparece en repositorio o logs.
 - [x] Respuestas rápidas para tareas, gastos y resumen diario, con opción «dame más detalles».
 - [x] Ayuda contextual con ejemplos en español e inglés.
 - [x] Soportar «repite» y continuación mediante «más detalles» con contexto corto.
+- [x] Mantener hasta cuatro turnos de contexto y enviarlos al agente.
 - [ ] Soportar «sí» y «no» para confirmaciones seguras.
 - [x] Diferenciar claramente cuenta sin vincular, sesión vencida, límite y caída
   temporal del agente.
-- [ ] Añadir tarjetas útiles para Echo Show sin mostrar información sensible de más.
+- [x] Añadir tarjetas útiles para Echo Show y omitirlas en modo privado.
 - [ ] Medir duración de las consultas y reducir las que se acerquen al timeout.
 
 **Aceptación:** las consultas comunes requieren una sola frase, la respuesta no
@@ -62,10 +64,10 @@ se corta y el usuario entiende cómo continuar ante cualquier error.
 ## Etapa 4 — Privacidad en el hogar
 
 - [x] Modo privado por sesión que bloquea consultas financieras sensibles.
-- [ ] Permitir ocultar saldos y movimientos detallados mediante una preferencia persistente.
+- [x] Permitir ocultar saldos y movimientos detallados mediante una preferencia persistente.
 - [ ] Evaluar un PIN de voz para consultas financieras sensibles.
 - [ ] Añadir aviso claro sobre respuestas audibles por personas cercanas.
-- [ ] Definir qué módulos puede consultar Alexa desde preferencias de Evoll.
+- [x] Definir qué módulos puede consultar Alexa desde preferencias de Evoll.
 
 **Aceptación:** el propietario controla qué se puede pronunciar y las consultas
 sensibles requieren la protección elegida.
@@ -77,7 +79,7 @@ sensibles requieren la protección elegida.
 - [ ] Consultas rápidas dedicadas para presupuesto y deudas.
 - [ ] Recordatorios de Alexa para compromisos seleccionados por el usuario.
 - [ ] Acciones de escritura con confirmación explícita, idempotencia y auditoría.
-- [ ] Sincronizar preferencias de voz con la aplicación Evoll.
+- [x] Sincronizar preferencias de voz con la aplicación Evoll.
 
 Las escrituras se implementarán después de privacidad y seguridad. Alexa debe
 leer la acción propuesta, pedir confirmación y evitar duplicados si Amazon

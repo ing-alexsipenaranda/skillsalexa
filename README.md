@@ -186,6 +186,17 @@ Esta versión no incorpora un PIN de voz ni identificación individual del habla
 
 ## Renovación, revocación y límites
 
+### Respaldo y monitoreo en el VPS
+
+`scripts/backup-vps.sh` crea una copia consistente de SQLite mediante
+`VACUUM INTO`, la extrae del contenedor con permisos `600` y conserva 14 días.
+La copia contiene tokens cifrados, pero debe almacenarse en un destino privado
+y respaldarse junto con `TOKEN_ENCRYPTION_KEY`; sin esa clave no puede restaurarse.
+
+`scripts/health-vps.sh` comprueba el estado del contenedor y el health check
+HTTPS público. Ambos scripts admiten `EVOLL_CONTAINER`; el respaldo también
+admite `EVOLL_BACKUP_DIR`. Pueden ejecutarse desde cron sin imprimir secretos.
+
 Las vinculaciones caducan a los 90 días y hay que volver a vincularlas. Si cambia
 la clave de cifrado o se pierde SQLite, las sesiones dejan de poder renovarse.
 Mantén la clave en un gestor de secretos y backups cifrados de la base.

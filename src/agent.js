@@ -12,7 +12,7 @@ function validateUrl(value) {
 function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5500}) {
   const origin = validateUrl(url);
   if (provider && !['openai', 'anthropic'].includes(provider)) throw new Error('Invalid AGENT_PROVIDER');
-  return async (message, token, language = 'es') => {
+  return async (message, token, language = 'es', history = []) => {
     if (!token) throw new AgentError('unauthorized');
     let res;
     const controller = new AbortController();
@@ -21,7 +21,9 @@ function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5
       res = await fetchImpl(`${origin}/functions/v1/agent`, {
         method:'POST', redirect:'error', signal:controller.signal,
         headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json'},
-        body:JSON.stringify({message, language:language === 'en' ? 'en' : 'es', channel:'alexa', ...(provider ? {provider} : {})})
+        body:JSON.stringify({message, language:language === 'en' ? 'en' : 'es', channel:'alexa',
+          ...(Array.isArray(history) && history.length ? {history:history.slice(-4)} : {}),
+          ...(provider ? {provider} : {})})
       });
     } catch { throw new AgentError('unavailable'); }
     finally { clearTimeout(timeout); }
@@ -31,7 +33,15 @@ function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5
     let data;
     try { data = await res.json(); } catch { throw new AgentError('unavailable'); }
     if (typeof data.reply !== 'string' || !data.reply.trim()) throw new AgentError('unavailable');
-    return {reply:data.reply, pendingActions:Array.isArray(data.actions) ? data.actions.length > 0 : Boolean(data.action)};
+    return {
+      reply:data.reply,
+      pendingActions:Array.isArray(data.actions) ? data.actions.length > 0 : Boolean(data.action),
+      alexa:data.alexa && typeof data.alexa === 'object' ? {
+        privateMode:data.alexa.privateMode === true,
+        dailySummary:data.alexa.dailySummary !== false,
+        allowActions:data.alexa.allowActions === true,
+      } : null,
+    };
   };
 }
 module.exports = {createAgent, AgentError};

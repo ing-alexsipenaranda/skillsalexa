@@ -14,7 +14,7 @@ function copy(h) { return COPY[language(h)]; }
 function speechText(text) { return text.replace(/```[\s\S]*?```/g,' ').replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').replace(/[*_#`]/g,'').replace(/\s+/g,' ').trim().slice(0,2200); }
 function escapeXml(text) { return text.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c])); }
 function remember(h,text,question) { const a=h.attributesManager.getSessionAttributes(); a.lastSpeech=speechText(text); if(question)a.lastQuestion=question; h.attributesManager.setSessionAttributes(a); }
-function say(h,text,keepOpen=true,question) { remember(h,text,question); const b=h.responseBuilder.speak(`<speak>${escapeXml(speechText(text))}</speak>`); return keepOpen?b.reprompt(copy(h).reprompt).getResponse():b.withShouldEndSession(true).getResponse(); }
+function say(h,text,keepOpen=true,question,card=false) { remember(h,text,question); const clean=speechText(text); const b=h.responseBuilder.speak(`<speak>${escapeXml(clean)}</speak>`); if(card)b.withSimpleCard('Evoll',clean); return keepOpen?b.reprompt(copy(h).reprompt).getResponse():b.withShouldEndSession(true).getResponse(); }
 function link(h) { return h.responseBuilder.speak(copy(h).link).withLinkAccountCard().withShouldEndSession(true).getResponse(); }
 function sensitive(q) { return /gast|saldo|deuda|presupuesto|movimiento|ingreso|spend|spent|balance|debt|budget|transaction|income/i.test(q); }
 function createSkill({skillId,agent,verifySkillId=true}) {
@@ -23,7 +23,21 @@ function createSkill({skillId,agent,verifySkillId=true}) {
   const askAgent=async(h,question)=>{
     const token=h.requestEnvelope.context?.System?.user?.accessToken; if(!token)return link(h);
     if(h.attributesManager.getSessionAttributes().privateMode&&sensitive(question))return say(h,copy(h).privateBlocked);
-    try { const result=await agent(question,token,language(h)); if(result.pendingActions)return say(h,copy(h).writeBlocked); return say(h,result.reply,true,question); }
+    try {
+      const attributes=h.attributesManager.getSessionAttributes();
+      const history=Array.isArray(attributes.conversation)?attributes.conversation:[];
+      const result=await agent(question,token,language(h),history);
+      if(result.pendingActions)return say(h,copy(h).writeBlocked);
+      const persistentPrivate=result.alexa?.privateMode===true;
+      if(!persistentPrivate) {
+        attributes.conversation=[...history,{role:'user',content:question},{role:'assistant',content:speechText(result.reply)}].slice(-4);
+        h.attributesManager.setSessionAttributes(attributes);
+      } else {
+        delete attributes.conversation;
+        h.attributesManager.setSessionAttributes(attributes);
+      }
+      return say(h,result.reply,true,question,!persistentPrivate);
+    }
     catch(e) { if(e.kind==='unauthorized')return link(h); return say(h,e.kind==='quota'?copy(h).quota:copy(h).unavailable); }
   };
   return builder.addRequestHandlers(

@@ -15,15 +15,15 @@ with zipfile.ZipFile(root / 'dist/evoll-alexa-hosted.zip', 'w', zipfile.ZIP_DEFL
 (root / 'downloads').mkdir(exist_ok=True)
 shutil.copyfile(root / 'dist/evoll-alexa-hosted.zip', root / 'downloads/evoll-alexa-hosted.zip')
 with tarfile.open(root / 'dist/evoll-linking.tar.gz', 'w:gz') as archive:
-    for name in ['broker/server.js', 'broker/store.js', 'broker/revoke.js',
+    for name in ['broker/server.js', 'broker/store.js', 'broker/revoke.js', 'broker/backup.js',
                  'broker/.env.example', 'package.json', 'package-lock.json',
                  'dist/linking/index.html', 'dist/linking/app.js', 'README.md']:
         archive.add(root / name, arcname=name, recursive=False)
 with tarfile.open(root / 'dist/evoll-docker.tar.gz', 'w:gz') as archive:
     names = ['Dockerfile', 'compose.yaml', 'compose.hostinger.yaml', '.dockerignore', '.gitignore',
              '.env.compose.example', 'package.json', 'package-lock.json',
-             'README.md', 'scripts/build.mjs', 'broker/server.js',
-             'broker/store.js', 'broker/revoke.js', 'broker/.env.example']
+             'README.md', 'scripts/build.mjs', 'scripts/backup-vps.sh', 'scripts/health-vps.sh', 'broker/server.js',
+             'broker/store.js', 'broker/revoke.js', 'broker/backup.js', 'broker/.env.example']
     for folder in ['src', 'linking', 'skill-package']:
         names.extend(str(p.relative_to(root)) for p in (root / folder).rglob('*') if p.is_file())
     for name in sorted(names):
