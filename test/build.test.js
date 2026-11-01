@@ -31,7 +31,7 @@ test('Alexa-hosted bundle loads on a runtime without global fetch',async()=>{
   }
 });
 test('built linking page signs in directly to Supabase and sends only refresh token to broker',async()=>{
-  const nodes={};for(const name of ['status','details','login','consent','email','password','approve','deny'])nodes[name]={hidden:true,textContent:'',value:'',listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}};
+  const nodes={};for(const name of ['status','details','login','social','consent','email','password','google','apple','approve','deny'])nodes[name]={hidden:true,textContent:'',value:'',listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}};
   const requests=[],redirects=[];
   const payload=Buffer.from(JSON.stringify({sub:'user-a',exp:Math.floor(Date.now()/1000)+3600})).toString('base64url');
   const browserFetch=async(input,options={})=>{
@@ -41,11 +41,12 @@ test('built linking page signs in directly to Supabase and sends only refresh to
     if(url==='/approve')return Response.json({redirect:'https://alexa.amazon.com/api/skill/link/test?code=code'});
     throw Error('unexpected URL: '+url);
   };
-  const context={document:{getElementById:id=>nodes[id]},location:{replace:url=>redirects.push(url)},fetch:browserFetch,URL,URLSearchParams,Headers,Request,Response,AbortController,AbortSignal,TextEncoder,TextDecoder,crypto:webcrypto,console,setTimeout,clearTimeout,setInterval,clearInterval,atob,btoa,Blob,WebSocket:class{},navigator:{}};
+  const context={document:{getElementById:id=>nodes[id]},location:{origin:'https://alexa.evoll.app',pathname:'/login.html',search:'',hash:'',replace:url=>redirects.push(url),assign:url=>redirects.push(url)},history:{replaceState(){}},fetch:browserFetch,URL,URLSearchParams,Headers,Request,Response,AbortController,AbortSignal,TextEncoder,TextDecoder,crypto:webcrypto,console,setTimeout,clearTimeout,setInterval,clearInterval,atob,btoa,Blob,WebSocket:class{},navigator:{}};
   context.window=context;
   vm.runInNewContext(readFileSync('dist/linking/app.js','utf8'),context);
   for(let i=0;i<5;i++)await new Promise(r=>setImmediate(r));
   assert.equal(nodes.login.hidden,false);
+  assert.equal(nodes.social.hidden,false);
   nodes.email.value='test@example.com';nodes.password.value='local-test-password';
   await nodes.login.listeners.submit({preventDefault(){}});
   assert.equal(nodes.password.value,'');assert.equal(nodes.consent.hidden,false);

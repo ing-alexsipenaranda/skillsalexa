@@ -88,6 +88,8 @@ reintenta una solicitud.
 
 ## Etapa 6 — Publicación y operación
 
+- [x] Añadir correo, Google y Apple a la pantalla de vinculación mediante Supabase Auth.
+- [ ] Habilitar Google/Apple y registrar el redirect de producción en Supabase.
 - [ ] Completar política de privacidad, términos, iconos y ficha de distribución.
 - [ ] Ejecutar pruebas funcionales y de certificación para cada idioma.
 - [ ] Preparar ambiente de pruebas separado de producción.

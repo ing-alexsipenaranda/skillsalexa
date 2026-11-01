@@ -173,8 +173,12 @@ El puente gestiona `state`; no inventes ni sustituyas esas URLs. La duración de
 token se envía en `expires_in` y Alexa renueva mediante `/token`.
 
 No se solicita que habilites Data API, cambies tablas, desactives RLS o publiques
-la app móvil. La pantalla actual admite usuarios de Evoll con correo y contraseña;
-Apple/SSO sin contraseña requeriría añadir ese método de login antes de vincular.
+la app móvil. La pantalla admite correo y contraseña, Google y Apple mediante
+Supabase Auth. Para los proveedores sociales se debe habilitar cada uno en
+**Authentication → Providers** y añadir exactamente
+`https://alexa.evoll.app/login.html` en **Authentication → URL Configuration →
+Redirect URLs**. El retorno se procesa en el navegador y el broker solo recibe
+el refresh token después del consentimiento.
 
 ### 4. Probar en tu casa
 
