@@ -1,7 +1,7 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {createSkill}=require('../src');
-const {createAgent}=require('../src/agent');
+const {createAgent,createActionExecutor}=require('../src/agent');
 const skillId='amzn1.ask.skill.test';
 function request({type='IntentRequest',intent='AskEvollIntent',question='cuánto gasté este mes',token='user-token',id=skillId,locale='es-ES',attributes={}}={}) {
   return {version:'1.0',session:{new:true,sessionId:'test-session',application:{applicationId:id},user:{userId:'test-user'},attributes},
@@ -31,7 +31,7 @@ test('complete SDK to HTTP adapter path forwards user token and question',async(
 });
 test('proposed writes never claim success or expose an unpersisted proposal',async()=>{
   const out=await skill(async()=>({reply:'Guardado',pendingActions:true})).invoke(request());
-  assert.match(out.response.outputSpeech.ssml,/no puede confirmarla ni guardarla/);assert.doesNotMatch(out.response.outputSpeech.ssml,/Guardado/);
+  assert.match(out.response.outputSpeech.ssml,/revisar en la aplicación/);assert.doesNotMatch(out.response.outputSpeech.ssml,/Guardado/);
 });
 for(const [code,expected] of [[401,'LinkAccount'],[403,'LinkAccount'],[429,'límite'],[500,'no pudo']])test(`HTTP ${code} handled`,async()=>{
   const agent=createAgent({url:'https://example.supabase.co',fetchImpl:async()=>new Response('',{status:code})});
@@ -95,6 +95,31 @@ test('persistent private mode omits display card and clears conversation history
     .invoke(request({question:'mis datos',attributes:{conversation:[{role:'user',content:'anterior'}]}}));
   assert.equal(out.response.card,undefined);
   assert.equal(out.sessionAttributes.conversation,undefined);
+});
+test('confirmed task executes once through the action executor',async()=>{
+  let call;
+  const instance=createSkill({skillId,agent:async()=>({reply:'Preparé una tarea',pendingActions:true,actions:[{type:'task',title:'Pagar factura',date:'2026-11-02'}],alexa:{allowActions:true}}),actionExecutor:async(...args)=>{call=args;return{status:'created'};}});
+  const proposal=await instance.invoke(request({question:'crea una tarea'}));
+  assert.match(proposal.response.outputSpeech.ssml,/Quieres guardarla/);
+  assert.equal(proposal.sessionAttributes.pendingAction.type,'task');
+  const confirmed=await instance.invoke(request({intent:'AMAZON.YesIntent',question:null,attributes:proposal.sessionAttributes}));
+  assert.equal(call[0].title,'Pagar factura');assert.equal(call[1],'user-token');
+  assert.match(confirmed.response.outputSpeech.ssml,/quedó guardada/);
+  assert.equal(confirmed.sessionAttributes.pendingAction,undefined);
+});
+test('declining an action clears it without executing',async()=>{
+  const out=await skill(()=>{throw Error('must not call');}).invoke(request({intent:'AMAZON.NoIntent',question:null,attributes:{pendingAction:{type:'task',title:'No guardar'}}}));
+  assert.match(out.response.outputSpeech.ssml,/no guardé/);assert.equal(out.sessionAttributes.pendingAction,undefined);
+});
+test('action executor sends the idempotency key and user token',async()=>{
+  const execute=createActionExecutor({url:'https://example.supabase.co',fetchImpl:async(url,options)=>{
+    assert.equal(url,'https://example.supabase.co/functions/v1/alexa-actions');
+    assert.equal(options.headers.Authorization,'Bearer user-token');
+    assert.deepEqual(JSON.parse(options.body),{action:{type:'task',title:'Comprar leche'},idempotencyKey:'request-12345'});
+    return Response.json({status:'created',type:'task'});
+  }});
+  const result=await execute({type:'task',title:'Comprar leche'},'user-token','request-12345');
+  assert.equal(result.status,'created');
 });
 test('malformed agent output is rejected',async()=>{
   const agent=createAgent({url:'https://example.supabase.co',fetchImpl:async()=>Response.json({actions:[]})});

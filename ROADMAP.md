@@ -52,7 +52,7 @@ contenedor y ninguna credencial aparece en repositorio o logs.
 - [x] Ayuda contextual con ejemplos en español e inglés.
 - [x] Soportar «repite» y continuación mediante «más detalles» con contexto corto.
 - [x] Mantener hasta cuatro turnos de contexto y enviarlos al agente.
-- [ ] Soportar «sí» y «no» para confirmaciones seguras.
+- [x] Soportar «sí» y «no» para confirmar tareas y recordatorios.
 - [x] Diferenciar claramente cuenta sin vincular, sesión vencida, límite y caída
   temporal del agente.
 - [x] Añadir tarjetas útiles para Echo Show y omitirlas en modo privado.
@@ -76,9 +76,10 @@ sensibles requieren la protección elegida.
 
 - [x] Resumen diario bajo demanda: tareas, agenda, metas y alertas financieras.
 - [x] Consultas rápidas dedicadas para tareas y gastos.
-- [ ] Consultas rápidas dedicadas para presupuesto y deudas.
+- [x] Consultas rápidas dedicadas para presupuesto y deudas.
 - [ ] Recordatorios de Alexa para compromisos seleccionados por el usuario.
-- [ ] Acciones de escritura con confirmación explícita, idempotencia y auditoría.
+- [x] Tareas y recordatorios con confirmación explícita, idempotencia y auditoría.
+- [ ] Extender la confirmación segura a las demás acciones de escritura.
 - [x] Sincronizar preferencias de voz con la aplicación Evoll.
 
 Las escrituras se implementarán después de privacidad y seguridad. Alexa debe

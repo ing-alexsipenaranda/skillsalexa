@@ -33,9 +33,11 @@ function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5
     let data;
     try { data = await res.json(); } catch { throw new AgentError('unavailable'); }
     if (typeof data.reply !== 'string' || !data.reply.trim()) throw new AgentError('unavailable');
+    const actions=Array.isArray(data.actions)?data.actions.filter(action=>action&&['task','reminder'].includes(action.type)).slice(0,2):[];
     return {
       reply:data.reply,
       pendingActions:Array.isArray(data.actions) ? data.actions.length > 0 : Boolean(data.action),
+      actions,
       alexa:data.alexa && typeof data.alexa === 'object' ? {
         privateMode:data.alexa.privateMode === true,
         dailySummary:data.alexa.dailySummary !== false,
@@ -44,4 +46,20 @@ function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5
     };
   };
 }
-module.exports = {createAgent, AgentError};
+function createActionExecutor({url,fetchImpl=globalThis.fetch,timeoutMs=5500}) {
+  const origin=validateUrl(url);
+  return async(action,token,idempotencyKey)=>{
+    if(!token)throw new AgentError('unauthorized');
+    if(!action||!['task','reminder'].includes(action.type))throw new AgentError('invalid');
+    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),timeoutMs);
+    let res;
+    try { res=await fetchImpl(`${origin}/functions/v1/alexa-actions`,{method:'POST',redirect:'error',signal:controller.signal,headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({action,idempotencyKey})}); }
+    catch { throw new AgentError('unavailable'); }
+    finally { clearTimeout(timeout); }
+    if(res.status===401)throw new AgentError('unauthorized');
+    if(res.status===403)throw new AgentError('forbidden');
+    if(!res.ok)throw new AgentError('unavailable');
+    return res.json();
+  };
+}
+module.exports = {createAgent,createActionExecutor,AgentError};

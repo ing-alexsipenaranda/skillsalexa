@@ -22,6 +22,12 @@ Reutiliza las capacidades del agente de LifeOs: gastos/ingresos, presupuestos,
 movimientos, metas, deudas, tareas, próximos compromisos, notas y vestuario.
 No promete acceso a módulos que el agente no ofrece.
 
+Las tareas y recordatorios propuestos por voz pueden guardarse después de una
+confirmación explícita «sí». La ejecución requiere que el usuario habilite
+acciones por voz en Evoll, usa RLS y una clave de idempotencia para que un
+reintento de Alexa no duplique el registro. El resto de propuestas continúa
+requiriendo confirmación dentro de la aplicación.
+
 Las propuestas de cambios devueltas en `actions` NO se ejecutan ni guardan.
 La skill pide volver a solicitarlas en la app, porque las propuestas de esta
 consulta no se sincronizan automáticamente con el móvil. El agente existente
