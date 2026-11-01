@@ -205,7 +205,9 @@ y respaldarse junto con `TOKEN_ENCRYPTION_KEY`; sin esa clave no puede restaurar
 
 `scripts/health-vps.sh` comprueba el estado del contenedor y el health check
 HTTPS público. Ambos scripts admiten `EVOLL_CONTAINER`; el respaldo también
-admite `EVOLL_BACKUP_DIR`. Pueden ejecutarse desde cron sin imprimir secretos.
+admite `EVOLL_BACKUP_DIR`. Si se configura `ALERT_WEBHOOK_URL`, un fallo envía
+un aviso genérico sin datos personales. Pueden ejecutarse desde cron sin
+imprimir secretos.
 
 Las vinculaciones caducan a los 90 días y hay que volver a vincularlas. Si cambia
 la clave de cifrado o se pierde SQLite, las sesiones dejan de poder renovarse.
