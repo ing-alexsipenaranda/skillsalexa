@@ -134,8 +134,8 @@ function createBroker(config,{store,fetchImpl=fetch,staticDir=join(__dirname,'..
         }
         return json(res,400,{error:'unsupported_grant_type'});
       }
-      if (req.method==='GET' && ['/login.html','/app.js'].includes(url.pathname)) {
-        const name=url.pathname==='/login.html' ? 'index.html' : 'app.js';
+      if (req.method==='GET' && ['/login.html','/app.js','/privacy','/terms'].includes(url.pathname)) {
+        const name=url.pathname==='/login.html' ? 'index.html' : url.pathname==='/privacy' ? 'privacy.html' : url.pathname==='/terms' ? 'terms.html' : 'app.js';
         const data=readFileSync(join(staticDir,name));
         res.writeHead(200,{'Content-Type':name.endsWith('.html')?'text/html; charset=utf-8':'text/javascript; charset=utf-8'});return res.end(data);
       }

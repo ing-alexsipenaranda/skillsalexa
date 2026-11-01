@@ -27,3 +27,7 @@ cuenta Evoll vinculada.
 **Categoría sugerida:** Productivity.
 
 **Requisitos:** cuenta Evoll, vinculación de cuenta y un idioma compatible.
+
+**Política de privacidad:** `https://alexa.evoll.app/privacy`
+
+**Términos de uso:** `https://alexa.evoll.app/terms`

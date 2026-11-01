@@ -94,7 +94,8 @@ reintenta una solicitud.
 - [x] Preparar borradores bilingües de política de privacidad.
 - [x] Preparar términos y ficha de distribución bilingües.
 - [x] Exportar desde la marca oficial los iconos PNG de 108 y 512 px.
-- [ ] Añadir contacto oficial y publicar privacidad/términos.
+- [x] Servir privacidad y términos bilingües desde el broker.
+- [ ] Añadir contacto oficial y desplegar las rutas públicas.
 - [ ] Ejecutar pruebas funcionales y de certificación para cada idioma.
 - [ ] Preparar ambiente de pruebas separado de producción.
 - [x] Documentar métricas seguras y lista de certificación.

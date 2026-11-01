@@ -27,3 +27,7 @@ required.
 **Suggested category:** Productivity.
 
 **Requirements:** Evoll account, account linking, and a supported language.
+
+**Privacy policy:** `https://alexa.evoll.app/privacy`
+
+**Terms of use:** `https://alexa.evoll.app/terms`

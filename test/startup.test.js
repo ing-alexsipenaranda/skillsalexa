@@ -19,6 +19,8 @@ test('standalone service starts with private config and serves health and linkin
     const base=`http://127.0.0.1:${port}`;
     const res=await fetch(base+'/health');assert.equal(res.status,200);assert.deepEqual(await res.json(),{status:'ok'});
     const page=await fetch(base+'/login.html');assert.equal(page.status,200);assert.match(await page.text(),/Vincular Evoll con Alexa/);assert.match(page.headers.get('content-security-policy'),/frame-ancestors 'none'/);
+    const privacy=await fetch(base+'/privacy');assert.equal(privacy.status,200);assert.match(await privacy.text(),/Privacy Policy/);
+    const terms=await fetch(base+'/terms');assert.equal(terms.status,200);assert.match(await terms.text(),/Terms of Use/);
     assert.equal((await fetch(base+'/session')).status,400);
   }finally{
     child.kill('SIGTERM');if(child.exitCode===null)await new Promise(r=>child.once('exit',r));rmSync(dir,{recursive:true,force:true});
