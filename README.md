@@ -1,5 +1,7 @@
 # Evoll para Alexa
 
+[![CI](https://github.com/ing-alexsipenaranda/skillsalexa/actions/workflows/ci.yml/badge.svg?branch=codex%2Fevoll-alexa)](https://github.com/ing-alexsipenaranda/skillsalexa/actions/workflows/ci.yml)
+
 El trabajo pendiente y sus criterios de aceptación están en [ROADMAP.md](ROADMAP.md).
 
 Skill personal en español para consultar el agente existente de Evoll/LifeOs.
