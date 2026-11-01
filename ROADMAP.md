@@ -39,7 +39,7 @@ usuario vinculado y otra cuenta no puede leerlos.
   una restauración.
 - [x] Añadir health checks de Docker y HTTPS utilizables desde cron o monitoreo.
 - [ ] Conectar el health check a un canal externo de alertas.
-- [ ] Definir actualización segura del contenedor con rollback.
+- [x] Definir actualización segura del contenedor con backup y rollback automático.
 - [ ] Revisar logs para garantizar que nunca registren tokens, contraseñas,
   cookies ni parámetros OAuth.
 
@@ -91,11 +91,13 @@ reintenta una solicitud.
 
 - [x] Añadir correo, Google y Apple a la pantalla de vinculación mediante Supabase Auth.
 - [ ] Habilitar Google/Apple y registrar el redirect de producción en Supabase.
-- [ ] Completar política de privacidad, términos, iconos y ficha de distribución.
+- [x] Preparar borradores bilingües de política de privacidad.
+- [ ] Añadir contacto oficial, publicar privacidad, completar términos, iconos y ficha.
 - [ ] Ejecutar pruebas funcionales y de certificación para cada idioma.
 - [ ] Preparar ambiente de pruebas separado de producción.
 - [x] Documentar métricas seguras y lista de certificación.
-- [ ] Completar soporte y procedimiento de incidentes.
+- [x] Documentar procedimiento de incidentes y rollback.
+- [ ] Añadir contacto y canal oficial de soporte.
 - [ ] Solicitar certificación únicamente cuando el flujo personal sea estable.
 
 **Aceptación:** una instalación nueva puede operarse y recuperarse siguiendo la

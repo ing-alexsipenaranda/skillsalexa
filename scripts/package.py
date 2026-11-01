@@ -22,7 +22,7 @@ with tarfile.open(root / 'dist/evoll-linking.tar.gz', 'w:gz') as archive:
 with tarfile.open(root / 'dist/evoll-docker.tar.gz', 'w:gz') as archive:
     names = ['Dockerfile', 'compose.yaml', 'compose.hostinger.yaml', '.dockerignore', '.gitignore',
              '.env.compose.example', 'package.json', 'package-lock.json',
-             'README.md', 'scripts/build.mjs', 'scripts/backup-vps.sh', 'scripts/health-vps.sh', 'broker/server.js',
+             'README.md', 'scripts/build.mjs', 'scripts/backup-vps.sh', 'scripts/health-vps.sh', 'scripts/update-vps.sh', 'broker/server.js',
              'broker/store.js', 'broker/revoke.js', 'broker/backup.js', 'broker/.env.example']
     for folder in ['src', 'linking', 'skill-package']:
         names.extend(str(p.relative_to(root)) for p in (root / folder).rglob('*') if p.is_file())

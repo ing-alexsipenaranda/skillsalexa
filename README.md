@@ -209,9 +209,19 @@ admite `EVOLL_BACKUP_DIR`. Si se configura `ALERT_WEBHOOK_URL`, un fallo envía
 un aviso genérico sin datos personales. Pueden ejecutarse desde cron sin
 imprimir secretos.
 
+`scripts/update-vps.sh` crea primero un backup, conserva la imagen y commit
+anteriores, actualiza únicamente el servicio `linking` y valida health interno y
+externo. Si falla, restaura automáticamente la imagen y checkout anteriores; no
+reinicia Nginx Proxy Manager ni los otros contenedores del VPS.
+
 La Lambda registra métricas estructuradas de estado y duración para consultas y
 acciones. No registra el texto de la pregunta, la respuesta, tokens ni identidad
 del usuario. Estos eventos pueden agregarse desde CloudWatch Logs/Alexa-hosted.
+
+El procedimiento de recuperación está en `docs/incident-response.md`. Los
+borradores bilingües de privacidad están en `docs/privacy-policy.es.md` y
+`docs/privacy-policy.en.md`; requieren añadir un correo oficial antes de
+publicarlos.
 
 Las vinculaciones caducan a los 90 días y hay que volver a vincularlas. Si cambia
 la clave de cifrado o se pierde SQLite, las sesiones dejan de poder renovarse.
