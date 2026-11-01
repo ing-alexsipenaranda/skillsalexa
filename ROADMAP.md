@@ -81,6 +81,7 @@ sensibles requieren la protección elegida.
 - [x] Consultas rápidas dedicadas para presupuesto y deudas.
 - [ ] Recordatorios de Alexa para compromisos seleccionados por el usuario.
 - [x] Tareas y recordatorios con confirmación explícita, idempotencia y auditoría.
+- [x] Verificar en PostgreSQL RLS, replay idempotente, permisos y zona horaria.
 - [ ] Extender la confirmación segura a las demás acciones de escritura.
 - [x] Sincronizar preferencias de voz con la aplicación Evoll.
 
