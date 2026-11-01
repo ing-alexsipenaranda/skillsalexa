@@ -209,6 +209,10 @@ admite `EVOLL_BACKUP_DIR`. Si se configura `ALERT_WEBHOOK_URL`, un fallo envía
 un aviso genérico sin datos personales. Pueden ejecutarse desde cron sin
 imprimir secretos.
 
+La Lambda registra métricas estructuradas de estado y duración para consultas y
+acciones. No registra el texto de la pregunta, la respuesta, tokens ni identidad
+del usuario. Estos eventos pueden agregarse desde CloudWatch Logs/Alexa-hosted.
+
 Las vinculaciones caducan a los 90 días y hay que volver a vincularlas. Si cambia
 la clave de cifrado o se pierde SQLite, las sesiones dejan de poder renovarse.
 Mantén la clave en un gestor de secretos y backups cifrados de la base.

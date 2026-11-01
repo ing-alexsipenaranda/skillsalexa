@@ -121,6 +121,13 @@ test('action executor sends the idempotency key and user token',async()=>{
   const result=await execute({type:'task',title:'Comprar leche'},'user-token','request-12345');
   assert.equal(result.status,'created');
 });
+test('agent metrics contain timing and status but no user content',async()=>{
+  const events=[];
+  const agent=createAgent({url:'https://example.supabase.co',metrics:event=>events.push(event),fetchImpl:async()=>Response.json({reply:'dato privado',actions:[]})});
+  await agent('mi pregunta privada','token-secreto');
+  assert.equal(events.length,1);assert.equal(events[0].status,'ok');assert.equal(typeof events[0].durationMs,'number');
+  assert.doesNotMatch(JSON.stringify(events),/pregunta privada|token-secreto|dato privado/);
+});
 test('malformed agent output is rejected',async()=>{
   const agent=createAgent({url:'https://example.supabase.co',fetchImpl:async()=>Response.json({actions:[]})});
   await assert.rejects(agent('hola','token'),{kind:'unavailable'});

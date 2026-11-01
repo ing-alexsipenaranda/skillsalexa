@@ -74,5 +74,6 @@ function createSkill({skillId,agent,actionExecutor,verifySkillId=true}) {
   ).addErrorHandlers({canHandle:()=>true,handle:h=>say(h,copy(h).error,false)}).create();
 }
 let skill;
-exports.handler=async event=>{const url=process.env.SUPABASE_URL||'https://melhdrdiesgeotzhkazg.supabase.co';skill??=createSkill({skillId:process.env.ALEXA_SKILL_ID,agent:createAgent({url,provider:process.env.AGENT_PROVIDER}),actionExecutor:createActionExecutor({url})});return skill.invoke(event);};
+const metrics=event=>console.info(JSON.stringify(event));
+exports.handler=async event=>{const url=process.env.SUPABASE_URL||'https://melhdrdiesgeotzhkazg.supabase.co';skill??=createSkill({skillId:process.env.ALEXA_SKILL_ID,agent:createAgent({url,provider:process.env.AGENT_PROVIDER,metrics}),actionExecutor:createActionExecutor({url,metrics})});return skill.invoke(event);};
 exports.createSkill=createSkill; exports.speechText=speechText;

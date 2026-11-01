@@ -56,7 +56,8 @@ contenedor y ninguna credencial aparece en repositorio o logs.
 - [x] Diferenciar claramente cuenta sin vincular, sesión vencida, límite y caída
   temporal del agente.
 - [x] Añadir tarjetas útiles para Echo Show y omitirlas en modo privado.
-- [ ] Medir duración de las consultas y reducir las que se acerquen al timeout.
+- [x] Medir duración y estado sin registrar contenido ni identidad del usuario.
+- [ ] Analizar métricas reales y reducir las consultas que se acerquen al timeout.
 
 **Aceptación:** las consultas comunes requieren una sola frase, la respuesta no
 se corta y el usuario entiende cómo continuar ante cualquier error.
@@ -93,7 +94,8 @@ reintenta una solicitud.
 - [ ] Completar política de privacidad, términos, iconos y ficha de distribución.
 - [ ] Ejecutar pruebas funcionales y de certificación para cada idioma.
 - [ ] Preparar ambiente de pruebas separado de producción.
-- [ ] Documentar métricas, alertas, soporte y procedimiento de incidentes.
+- [x] Documentar métricas seguras y lista de certificación.
+- [ ] Completar soporte y procedimiento de incidentes.
 - [ ] Solicitar certificación únicamente cuando el flujo personal sea estable.
 
 **Aceptación:** una instalación nueva puede operarse y recuperarse siguiendo la
