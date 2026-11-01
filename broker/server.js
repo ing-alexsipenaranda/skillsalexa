@@ -134,6 +134,19 @@ function createBroker(config,{store,fetchImpl=fetch,staticDir=join(__dirname,'..
         }
         return json(res,400,{error:'unsupported_grant_type'});
       }
+      if (req.method==='OPTIONS' && url.pathname==='/revoke-user') {
+        res.writeHead(204,{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization, content-type','Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Max-Age':'600'});return res.end();
+      }
+      if (req.method==='POST' && url.pathname==='/revoke-user') {
+        res.setHeader('Access-Control-Allow-Origin','*');
+        const auth=req.headers.authorization||'';
+        if(!auth.startsWith('Bearer '))return json(res,401,{error:'unauthorized'});
+        const client=createClient(config.supabaseUrl,config.publicKey,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},global:{fetch:(url,options)=>fetchImpl(url,{...options,signal:AbortSignal.timeout(10000),redirect:'error'})}});
+        const {data,error}=await client.auth.getUser(auth.slice(7));
+        if(error||!data.user?.id)return json(res,401,{error:'unauthorized'});
+        store.removeUser(data.user.id);
+        return json(res,200,{revoked:true});
+      }
       if (req.method==='GET' && ['/login.html','/app.js','/privacy','/terms'].includes(url.pathname)) {
         const name=url.pathname==='/login.html' ? 'index.html' : url.pathname==='/privacy' ? 'privacy.html' : url.pathname==='/terms' ? 'terms.html' : 'app.js';
         const data=readFileSync(join(staticDir,name));

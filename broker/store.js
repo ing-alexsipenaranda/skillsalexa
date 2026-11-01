@@ -29,6 +29,17 @@ class Store {
   }
   remove(kind,id) { this.db.prepare('DELETE FROM items WHERE kind=? AND id=?').run(kind,digest(id)); }
   clean() { this.db.prepare('DELETE FROM items WHERE expires<=?').run(Date.now()); }
+  removeUser(userId) {
+    let removed=0;
+    for(const row of this.db.prepare("SELECT id,payload FROM items WHERE kind='refresh'").all()) {
+      try {
+        if(this.open(row.payload).user_id===userId) {
+          this.db.prepare("DELETE FROM items WHERE kind='refresh' AND id=?").run(row.id);removed++;
+        }
+      } catch { /* A corrupt record is handled by normal token validation. */ }
+    }
+    return removed;
+  }
   close() { this.db.close(); }
 }
 module.exports = {Store,digest};

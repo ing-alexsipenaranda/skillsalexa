@@ -82,6 +82,15 @@ test('tokens are isolated by user and refresh cannot change identity',async t=>{
   assert.equal((await token(f,{grant_type:'refresh_token',refresh_token:'broker-token'})).status,400);
   assert.equal(f.store.get('refresh','broker-token'),null);
 });
+test('authenticated user can revoke only their own broker links',async t=>{
+  const f=await fixture(t,{fetchImpl:async()=>Response.json({user:{id:'user-a'}})});
+  f.store.put('refresh','token-a',{refresh_token:'a',user_id:'user-a'},Date.now()+60000);
+  f.store.put('refresh','token-b',{refresh_token:'b',user_id:'user-b'},Date.now()+60000);
+  const res=await f.call('/revoke-user',{method:'POST',headers:{Authorization:'Bearer valid-user-token'}});
+  assert.equal(res.status,200);assert.deepEqual(await res.json(),{revoked:true});
+  assert.equal(f.store.get('refresh','token-a'),null);assert.ok(f.store.get('refresh','token-b'));
+  assert.equal((await f.call('/revoke-user',{method:'POST'})).status,401);
+});
 test('expired records cannot be used and ciphertext detects tampering',()=>{
   const s=new Store(':memory:',key);
   try {

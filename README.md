@@ -227,6 +227,11 @@ Las vinculaciones caducan a los 90 días y hay que volver a vincularlas. Si camb
 la clave de cifrado o se pierde SQLite, las sesiones dejan de poder renovarse.
 Mantén la clave en un gestor de secretos y backups cifrados de la base.
 
+La aplicación Evoll puede llamar `POST /revoke-user` con el JWT vigente para
+eliminar únicamente las vinculaciones del usuario autenticado. El broker valida
+el JWT directamente con Supabase y no acepta un identificador enviado por el
+cliente.
+
 Para revocar TODOS los enlaces administrados por este puente, con las mismas
 variables de producción inyectadas:
 

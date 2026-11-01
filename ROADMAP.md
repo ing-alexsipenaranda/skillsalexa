@@ -69,6 +69,7 @@ se corta y el usuario entiende cómo continuar ante cualquier error.
 - [ ] Evaluar un PIN de voz para consultas financieras sensibles.
 - [ ] Añadir aviso claro sobre respuestas audibles por personas cercanas.
 - [x] Definir qué módulos puede consultar Alexa desde preferencias de Evoll.
+- [x] Permitir revocar todas las vinculaciones propias desde Evoll.
 
 **Aceptación:** el propietario controla qué se puede pronunciar y las consultas
 sensibles requieren la protección elegida.
