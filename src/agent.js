@@ -12,7 +12,7 @@ function validateUrl(value) {
 function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5500, metrics = ()=>{}}) {
   const origin = validateUrl(url);
   if (provider && !['openai', 'anthropic'].includes(provider)) throw new Error('Invalid AGENT_PROVIDER');
-  return async (message, token, language = 'es', history = []) => {
+  return async (message, token, language = 'es', history = [], capability = null) => {
     const started=Date.now();
     const record=status=>metrics({event:'evoll_agent_request',status,durationMs:Date.now()-started});
     if (!token) throw new AgentError('unauthorized');
@@ -25,11 +25,13 @@ function createAgent({url, provider, fetchImpl = globalThis.fetch, timeoutMs = 5
         headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json'},
         body:JSON.stringify({message, language:language === 'en' ? 'en' : 'es', channel:'alexa',
           ...(Array.isArray(history) && history.length ? {history:history.slice(-4)} : {}),
+          ...(capability ? {capability} : {}),
           ...(provider ? {provider} : {})})
       });
     } catch { record('network_error');throw new AgentError('unavailable'); }
     finally { clearTimeout(timeout); }
     if (res.status === 401 || res.status === 403) {record('unauthorized');throw new AgentError('unauthorized');}
+    if (res.status === 409) {record('forbidden');throw new AgentError('forbidden');}
     if (res.status === 429) {record('quota');throw new AgentError('quota');}
     if (!res.ok) {record('upstream_error');throw new AgentError('unavailable');}
     let data;

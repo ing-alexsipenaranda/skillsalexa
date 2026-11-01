@@ -59,10 +59,11 @@ test('English locale uses English speech and agent language',async()=>{
   assert.match(out.response.reprompt.outputSpeech.ssml,/daily summary/);
 });
 test('daily summary uses the dedicated prompt',async()=>{
-  let question;
-  await skill(async(q)=>{question=q;return{reply:'Resumen listo.'};})
+  let question,capability;
+  await skill(async(q,_token,_language,_history,feature)=>{question=q;capability=feature;return{reply:'Resumen listo.'};})
     .invoke(request({intent:'DailySummaryIntent',question:null}));
   assert.match(question,/resumen breve de hoy/);
+  assert.equal(capability,'daily_summary');
 });
 test('private mode blocks financial speech without calling the agent',async()=>{
   const out=await skill(()=>{throw Error('must not call');})
@@ -127,6 +128,12 @@ test('agent metrics contain timing and status but no user content',async()=>{
   await agent('mi pregunta privada','token-secreto');
   assert.equal(events.length,1);assert.equal(events[0].status,'ok');assert.equal(typeof events[0].durationMs,'number');
   assert.doesNotMatch(JSON.stringify(events),/pregunta privada|token-secreto|dato privado/);
+});
+test('disabled Alexa capability returns a clear preference message',async()=>{
+  const agent=createAgent({url:'https://example.supabase.co',fetchImpl:async()=>new Response(JSON.stringify({error:'disabled'}),{status:409,headers:{'content-type':'application/json'}})});
+  const out=await skill(agent).invoke(request({intent:'TasksIntent',question:null}));
+  assert.match(out.response.outputSpeech.ssml,/deshabilitada para Alexa/);
+  assert.equal(out.response.card,undefined);
 });
 test('malformed agent output is rejected',async()=>{
   const agent=createAgent({url:'https://example.supabase.co',fetchImpl:async()=>Response.json({actions:[]})});
