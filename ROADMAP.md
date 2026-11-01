@@ -93,8 +93,8 @@ reintenta una solicitud.
 - [ ] Habilitar Google/Apple y registrar el redirect de producción en Supabase.
 - [x] Preparar borradores bilingües de política de privacidad.
 - [x] Preparar términos y ficha de distribución bilingües.
-- [x] Identificar la fuente oficial y especificaciones de iconos.
-- [ ] Añadir contacto oficial, publicar privacidad/términos y exportar los PNG finales.
+- [x] Exportar desde la marca oficial los iconos PNG de 108 y 512 px.
+- [ ] Añadir contacto oficial y publicar privacidad/términos.
 - [ ] Ejecutar pruebas funcionales y de certificación para cada idioma.
 - [ ] Preparar ambiente de pruebas separado de producción.
 - [x] Documentar métricas seguras y lista de certificación.
