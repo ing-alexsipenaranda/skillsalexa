@@ -1,0 +1,11 @@
+[Unit]
+Description=Check Evoll Alexa container and HTTPS
+After=docker.service network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/evoll-alexa
+EnvironmentFile=-/etc/evoll-alexa-monitor.env
+ExecStart=/opt/evoll-alexa/scripts/health-vps.sh
+TimeoutStartSec=45
+UMask=0077

@@ -6,6 +6,7 @@ cd "$ROOT"
 
 echo "[1/5] Running the complete automated test suite"
 npm test
+python3 scripts/test_operations.py
 
 echo "[2/5] Building reviewable deployment packages"
 npm run package

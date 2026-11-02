@@ -1,0 +1,11 @@
+[Unit]
+Description=Back up encrypted Evoll Alexa links
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/evoll-alexa
+EnvironmentFile=-/etc/evoll-alexa-monitor.env
+ExecStart=/opt/evoll-alexa/scripts/backup-vps.sh
+TimeoutStartSec=5min
+UMask=0077
