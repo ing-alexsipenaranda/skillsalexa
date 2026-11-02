@@ -24,7 +24,7 @@ despliegue con las credenciales cargadas de forma privada:
 
 ```bash
 scripts/deploy-alexa-supabase.sh
-scripts/deploy-alexa-supabase.sh --apply
+APPLY_ALEXA_DEPLOY=yes scripts/deploy-alexa-supabase.sh
 ```
 
 Esto aplica las migraciones de preferencias y acciones, y publica las funciones
@@ -36,7 +36,6 @@ una respuesta pública `2xx` sería un bloqueo del lanzamiento.
 En `/opt/evoll-alexa` del VPS:
 
 ```bash
-git pull --ff-only
 scripts/update-vps.sh
 ```
 
@@ -47,6 +46,9 @@ ni otros contenedores. Después ejecuta:
 ```bash
 scripts/verify-production.sh
 ```
+
+El actualizador ejecuta su propio fetch y avance de Git: no hagas `git pull`
+antes, para que pueda conservar el commit anterior como punto de recuperación.
 
 Las rutas `/health`, `/privacy` y `/terms` deben responder `200`; los endpoints
 privados sin autenticación deben responder `401`.

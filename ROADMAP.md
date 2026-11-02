@@ -1,5 +1,9 @@
 # Plan de evolución de Evoll para Alexa
 
+La revisión técnica y el orden de las siguientes entregas están en
+[docs/improvement-plan.md](docs/improvement-plan.md), con criterios verificables
+y dependencias de producción.
+
 Este plan ordena el trabajo por dependencia. Una etapa se considera terminada
 solo cuando cumple sus criterios de aceptación, no únicamente cuando el código
 está desplegado.

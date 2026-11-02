@@ -4,13 +4,14 @@
 
 El trabajo pendiente y sus criterios de aceptación están en [ROADMAP.md](ROADMAP.md).
 
-Skill personal en español para consultar el agente existente de Evoll/LifeOs.
-No requiere una versión web de la app móvil ni cambios en LifeOs.
+Skill personal en español e inglés para consultar el agente de Evoll/LifeOs.
+Las preferencias de privacidad y acciones por voz requieren las migraciones y
+funciones de LifeOs indicadas en la lista de lanzamiento.
 
-**Estado:** backend de vinculación desplegado en `https://alexa.evoll.app`,
-health checks interno y HTTPS correctos, skill desplegada y funcionando en el
-simulador de Alexa. Quedan la vinculación real de la cuenta desde la app Alexa y
-la prueba en un Echo físico.
+**Estado:** se confirmó previamente el health del broker en `https://alexa.evoll.app`
+y la apertura en el simulador. Esto no confirma el despliegue de las últimas
+mejoras. Quedan la vinculación real y la prueba autenticada en un Echo físico.
+Consulta el [plan de mejoras](docs/improvement-plan.md) para las prioridades.
 
 ## Qué hace
 
@@ -227,7 +228,8 @@ publicarlos.
 
 Antes de cada actualización ejecuta `npm run release:preflight` y sigue
 `docs/release-checklist.md`. El preflight prueba el código, reconstruye paquetes,
-rechaza archivos secretos dentro de los artefactos y genera `dist/SHA256SUMS`.
+rechaza nombres de archivos sensibles dentro de los artefactos y genera
+`dist/SHA256SUMS`. No sustituye una revisión de secretos incrustados en el código.
 
 Las vinculaciones caducan a los 90 días y hay que volver a vincularlas. Si cambia
 la clave de cifrado o se pierde SQLite, las sesiones dejan de poder renovarse.
