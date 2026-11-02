@@ -80,3 +80,34 @@ un reintento no duplica datos y los fallos se explican sin afirmar éxito.
 Endurecer y probar `scripts/update-vps.sh` antes de usarlo para la próxima
 actualización. Después ampliar la matriz de conversación ES/EN. Estas dos tareas
 pueden prepararse en el repositorio sin acceso al servidor de producción.
+
+## Entrega posterior: actualización, privacidad y operación
+
+Implementado y probado localmente:
+
+- bloqueo de despliegues simultáneos y rechazo de cambios Git locales;
+- rollback con `--keep` y validación de salud de la versión recuperada;
+- pruebas de fallos de build, arranque y HTTP con Docker simulado;
+- monitor que rechaza contenedores detenidos o no saludables;
+- restauración real de SQLite con WAL y verificación del cifrado;
+- matriz de privacidad, ayuda y sesión vencida para los cuatro locales;
+- clave de idempotencia estable entre reintentos de confirmación;
+- lectura del título y fecha antes de confirmar una acción;
+- borrado de contexto y acciones pendientes al activar privacidad;
+- repetición de consultas mediante el backend para aplicar permisos vigentes;
+- contexto Alexa aislado de memoria e historial previos en LifeOs;
+- temporizadores listos para instalar: ver `operations.md`.
+
+Queda pendiente la activación en VPS, el despliegue de LifeOs y Lambda, pruebas
+con Docker real, proveedores Google/Apple reales, contacto oficial, webhook y
+Echo físico. Las credenciales necesarias no están configuradas en este entorno.
+El check completo de tipos de la Edge Function no pudo descargar `esm.sh`;
+las pruebas Deno locales de seguridad y privacidad sí pasaron.
+
+Los recordatorios actuales se guardan en Evoll como notificaciones push. Los
+recordatorios nativos de Alexa siguen pendientes de implementación: requieren
+permiso `alexa::alerts:reminders:skill:readwrite`, consentimiento en la app,
+comprobación de capacidad del dispositivo, fecha y zona explícitas, confirmación
+y reconciliación durable ante timeout. No se añadirá un reintento ciego de creación,
+porque podría duplicar el recordatorio. Su prueba de cierre debe incluir permiso
+denegado, creación, consulta, cancelación y timeout con un Echo real.

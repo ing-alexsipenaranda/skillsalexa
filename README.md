@@ -329,3 +329,17 @@ esa red ni sus contenedores actuales.
 Esta configuración sigue sin desplegarse en el servidor. Los datos de Amazon
 (Skill ID y redirect URIs exactas) y los secretos del puente siguen siendo
 requisitos para ejecutar el flujo real. No usar URLs o claves ficticias.
+
+### Cambios de privacidad y operación
+
+El modo privado de sesión se envía al agente y requiere que este lo reconozca.
+Despliega primero LifeOs y después la Lambda; una versión antigua del agente
+provoca un bloqueo conservador de consultas privadas. Alexa vuelve a consultar
+al repetir datos para aplicar permisos actuales. LifeOs excluye memoria e
+historial anteriores del contexto Alexa: las referencias ambiguas como «y ese»
+pueden necesitar una pregunta completa. «Más detalles» conserva la pregunta
+anterior explícita.
+
+Consulta `docs/operations.md` para instalar los temporizadores de salud y backup,
+las garantías y límites del rollback, y el crecimiento del broker más allá de
+una sola réplica.
