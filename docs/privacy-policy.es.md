@@ -35,5 +35,4 @@ consultas conforme a las preferencias del usuario.
 
 ## Contacto
 
-Antes de publicar esta política, sustituir esta línea por el correo oficial de
-privacidad y soporte de Evoll.
+[soporte@evoll.app](mailto:soporte@evoll.app)

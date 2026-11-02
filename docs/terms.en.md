@@ -34,5 +34,4 @@ medical, legal, or other professional advice.
 
 ## Contact
 
-Before publishing these terms, replace this line with Evoll's official support
-email address.
+[soporte@evoll.app](mailto:soporte@evoll.app)

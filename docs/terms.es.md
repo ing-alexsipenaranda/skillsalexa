@@ -34,5 +34,4 @@ financiera, médica, legal o profesional.
 
 ## Contacto
 
-Antes de publicar estos términos, sustituir esta línea por el correo oficial de
-soporte de Evoll.
+[soporte@evoll.app](mailto:soporte@evoll.app)

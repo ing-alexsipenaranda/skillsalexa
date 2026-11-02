@@ -31,3 +31,5 @@ cuenta Evoll vinculada.
 **Política de privacidad:** `https://alexa.evoll.app/privacy`
 
 **Términos de uso:** `https://alexa.evoll.app/terms`
+
+**Soporte:** [soporte@evoll.app](mailto:soporte@evoll.app)

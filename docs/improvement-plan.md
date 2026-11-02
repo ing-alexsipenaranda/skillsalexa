@@ -99,7 +99,7 @@ Implementado y probado localmente:
 - temporizadores listos para instalar: ver `operations.md`.
 
 Queda pendiente la activación en VPS, el despliegue de LifeOs y Lambda, pruebas
-con Docker real, proveedores Google/Apple reales, contacto oficial, webhook y
+con Docker real, proveedores Google/Apple reales, webhook y
 Echo físico. Las credenciales necesarias no están configuradas en este entorno.
 El check completo de tipos de la Edge Function no pudo descargar `esm.sh`;
 las pruebas Deno locales de seguridad y privacidad sí pasaron.
@@ -111,3 +111,7 @@ comprobación de capacidad del dispositivo, fecha y zona explícitas, confirmaci
 y reconciliación durable ante timeout. No se añadirá un reintento ciego de creación,
 porque podría duplicar el recordatorio. Su prueba de cierre debe incluir permiso
 denegado, creación, consulta, cancelación y timeout con un Echo real.
+
+Contacto público confirmado: soporte@evoll.app. Incorporado en políticas, términos
+y fichas ES/EN; pendiente desplegar esas páginas. El canal de alertas operativas
+sigue sin definir.

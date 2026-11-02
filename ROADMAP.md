@@ -101,12 +101,14 @@ reintenta una solicitud.
 - [x] Preparar términos y ficha de distribución bilingües.
 - [x] Exportar desde la marca oficial los iconos PNG de 108 y 512 px.
 - [x] Servir privacidad y términos bilingües desde el broker.
-- [ ] Añadir contacto oficial y desplegar las rutas públicas.
+- [x] Añadir contacto oficial: soporte@evoll.app.
+- [ ] Desplegar las rutas públicas actualizadas.
 - [ ] Ejecutar pruebas funcionales y de certificación para cada idioma.
 - [ ] Preparar ambiente de pruebas separado de producción.
 - [x] Documentar métricas seguras y lista de certificación.
 - [x] Documentar procedimiento de incidentes y rollback.
-- [ ] Añadir contacto y canal oficial de soporte.
+- [x] Definir el correo público de soporte: soporte@evoll.app.
+- [ ] Configurar el canal de alertas operativas.
 - [ ] Solicitar certificación únicamente cuando el flujo personal sea estable.
 
 **Aceptación:** una instalación nueva puede operarse y recuperarse siguiendo la

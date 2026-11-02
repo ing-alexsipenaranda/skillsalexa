@@ -31,3 +31,5 @@ required.
 **Privacy policy:** `https://alexa.evoll.app/privacy`
 
 **Terms of use:** `https://alexa.evoll.app/terms`
+
+**Support:** [soporte@evoll.app](mailto:soporte@evoll.app)

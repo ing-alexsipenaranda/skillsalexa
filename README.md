@@ -223,8 +223,7 @@ del usuario. Estos eventos pueden agregarse desde CloudWatch Logs/Alexa-hosted.
 
 El procedimiento de recuperación está en `docs/incident-response.md`. Los
 borradores bilingües de privacidad están en `docs/privacy-policy.es.md` y
-`docs/privacy-policy.en.md`; requieren añadir un correo oficial antes de
-publicarlos.
+`docs/privacy-policy.en.md`; el contacto oficial es soporte@evoll.app.
 
 Antes de cada actualización ejecuta `npm run release:preflight` y sigue
 `docs/release-checklist.md`. El preflight prueba el código, reconstruye paquetes,

@@ -35,5 +35,4 @@ user's preferences.
 
 ## Contact
 
-Before publishing this policy, replace this line with Evoll's official privacy
-and support email address.
+[soporte@evoll.app](mailto:soporte@evoll.app)
