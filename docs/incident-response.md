@@ -20,6 +20,10 @@ general de acción.
 4. Comprobar el estado de Supabase y la Edge Function `agent`.
 5. Revisar métricas de Lambda sin copiar tokens ni solicitudes al ticket.
 
+Después de un despliegue, ejecutar `scripts/verify-production.sh`. Comprueba las
+rutas públicas y confirma que `revoke-user`, `agent` y `alexa-actions` rechacen
+solicitudes anónimas. No usa credenciales ni crea datos.
+
 ## Actualización y rollback
 
 `scripts/update-vps.sh` respalda SQLite, conserva la imagen anterior, actualiza
