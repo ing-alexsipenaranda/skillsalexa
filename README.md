@@ -225,6 +225,10 @@ borradores bilingües de privacidad están en `docs/privacy-policy.es.md` y
 `docs/privacy-policy.en.md`; requieren añadir un correo oficial antes de
 publicarlos.
 
+Antes de cada actualización ejecuta `npm run release:preflight` y sigue
+`docs/release-checklist.md`. El preflight prueba el código, reconstruye paquetes,
+rechaza archivos secretos dentro de los artefactos y genera `dist/SHA256SUMS`.
+
 Las vinculaciones caducan a los 90 días y hay que volver a vincularlas. Si cambia
 la clave de cifrado o se pierde SQLite, las sesiones dejan de poder renovarse.
 Mantén la clave en un gestor de secretos y backups cifrados de la base.

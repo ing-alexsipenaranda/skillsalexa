@@ -4,14 +4,25 @@ import shutil
 import tarfile
 import zipfile
 root = Path(__file__).resolve().parent.parent
-with zipfile.ZipFile(root / 'dist/evoll-lambda.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+
+
+def add_reproducible_file(archive, path, archive_name):
+    """Write stable ZIP metadata so identical source creates an identical artifact."""
+    info = zipfile.ZipInfo(archive_name, date_time=(2020, 1, 1, 0, 0, 0))
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.create_system = 3
+    info.external_attr = 0o100644 << 16
+    archive.writestr(info, path.read_bytes())
+
+
+with zipfile.ZipFile(root / 'dist/evoll-lambda.zip', 'w') as archive:
     for path in sorted((root / 'dist/lambda').iterdir()):
         if path.is_file():
-            archive.write(path, path.name)
-with zipfile.ZipFile(root / 'dist/evoll-alexa-hosted.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+            add_reproducible_file(archive, path, path.name)
+with zipfile.ZipFile(root / 'dist/evoll-alexa-hosted.zip', 'w') as archive:
     for path in sorted((root / 'dist/alexa-hosted/lambda').iterdir()):
         if path.is_file():
-            archive.write(path, 'lambda/' + path.name)
+            add_reproducible_file(archive, path, 'lambda/' + path.name)
 (root / 'downloads').mkdir(exist_ok=True)
 shutil.copyfile(root / 'dist/evoll-alexa-hosted.zip', root / 'downloads/evoll-alexa-hosted.zip')
 with tarfile.open(root / 'dist/evoll-linking.tar.gz', 'w:gz') as archive:
