@@ -53,8 +53,9 @@ $('deny').addEventListener('click',async()=>{
     client=createClient(config.supabaseUrl,config.publicKey,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
     const fragment=new URLSearchParams(location.hash.replace(/^#/,''));
     if(fragment.get('access_token')&&fragment.get('refresh_token')) {
-      const {data,error}=await client.auth.setSession({access_token:fragment.get('access_token'),refresh_token:fragment.get('refresh_token')});
+      // Remove credentials from browser history before the first network await.
       history.replaceState(null,'',location.pathname+location.search);
+      const {data,error}=await client.auth.setSession({access_token:fragment.get('access_token'),refresh_token:fragment.get('refresh_token')});
       if(error||!data.session)throw new Error('No se pudo completar el acceso. Reinicia la vinculación desde Alexa.');
       showConsent(data.session);return;
     }

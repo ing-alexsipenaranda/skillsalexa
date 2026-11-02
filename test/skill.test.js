@@ -149,3 +149,62 @@ test('abort becomes an availability error',async()=>{
 test('reject unsafe Supabase endpoint and missing skill id',()=>{
   assert.throws(()=>createAgent({url:'http://example.com'}));assert.throws(()=>createSkill({agent:()=>{}}));
 });
+
+for(const locale of ['es-ES','es-MX','es-US','en-US']) {
+  test(`${locale}: privacy clears old data and pending actions; backend must acknowledge privacy`,async()=>{
+    let args;
+    const instance=skill(async(...values)=>{args=values;return{reply:'sensitive backend reply',alexa:{privateMode:false}};});
+    const enabled=await instance.invoke(request({locale,intent:'EnablePrivateModeIntent',attributes:{lastQuestion:'financial details',lastSpeech:'secret balance',conversation:[{role:'assistant',content:'secret'}],pendingAction:{type:'task'},pendingActionKey:'old'}}));
+    for(const key of ['lastQuestion','conversation','pendingAction','pendingActionKey'])assert.equal(enabled.sessionAttributes[key],undefined);
+    assert.doesNotMatch(enabled.response.outputSpeech.ssml,/secret/);
+    const response=await instance.invoke(request({locale,intent:'TasksIntent',attributes:enabled.sessionAttributes}));
+    assert.equal(args[5],true);
+    assert.doesNotMatch(response.response.outputSpeech.ssml,/sensitive backend reply/);
+    assert.equal(response.response.card,undefined);
+  });
+  test(`${locale}: repeat rechecks data permissions instead of speaking cached data`,async()=>{
+    const instance=skill(async()=>{throw Object.assign(new Error(),{kind:'forbidden'});});
+    const response=await instance.invoke(request({locale,intent:'AMAZON.RepeatIntent',attributes:{lastQuestion:'my balance',lastSpeech:'secret balance'}}));
+    assert.doesNotMatch(response.response.outputSpeech.ssml,/secret balance/);
+    assert.match(response.response.outputSpeech.ssml,locale.startsWith('en')?/disabled/:/deshabilitada/);
+  });
+  test(`${locale}: help, cancel and expired session use the correct language`,async()=>{
+    const instance=skill(async()=>{throw Object.assign(new Error(),{kind:'unauthorized'});});
+    const help=await instance.invoke(request({locale,intent:'AMAZON.HelpIntent'}));
+    assert.match(help.response.outputSpeech.ssml,locale.startsWith('en')?/You can ask/:/Puedes preguntar/);
+    const cancel=await instance.invoke(request({locale,intent:'AMAZON.CancelIntent'}));
+    assert.equal(cancel.response.shouldEndSession,true);
+    const expired=await instance.invoke(request({locale,attributes:{lastSpeech:'secret',pendingAction:{type:'task'}}}));
+    assert.equal(expired.response.card.type,'LinkAccount');
+    assert.deepEqual(expired.sessionAttributes,{});
+  });
+}
+test('retrying yes after timeout reuses the proposal key across different request IDs',async()=>{
+  const keys=[];
+  const instance=createSkill({skillId,agent:async()=>({reply:'proposal',pendingActions:true,actions:[{type:'task',title:'Buy milk'}],alexa:{allowActions:true}}),actionExecutor:async(_a,_t,key)=>{keys.push(key);if(keys.length===1)throw Error('timeout');return{status:'created'};}});
+  const proposal=await instance.invoke(request());
+  const first=request({intent:'AMAZON.YesIntent',attributes:proposal.sessionAttributes});first.request.requestId='yes-first';
+  const failed=await instance.invoke(first);
+  const retry=request({intent:'AMAZON.YesIntent',attributes:failed.sessionAttributes});retry.request.requestId='yes-second';
+  const success=await instance.invoke(retry);
+  assert.deepEqual(keys,['test-request','test-request']);
+  assert.equal(success.sessionAttributes.pendingAction,undefined);
+});
+test('confirmation reads the proposed title and date before saving',async()=>{
+  let saves=0;
+  const instance=createSkill({skillId,agent:async()=>({pendingActions:true,actions:[{type:'reminder',title:'Llamar al médico',date:'2026-12-01',time:'10:00'}],alexa:{allowActions:true}}),actionExecutor:async()=>{saves++;}});
+  const proposal=await instance.invoke(request());
+  assert.match(proposal.response.outputSpeech.ssml,/Llamar al médico.*2026-12-01 10:00/);
+  assert.equal(saves,0);
+  const cancelled=await instance.invoke(request({intent:'AMAZON.CancelIntent',attributes:proposal.sessionAttributes}));
+  assert.equal(cancelled.sessionAttributes.pendingAction,undefined);
+});
+test('session privacy is sent to Supabase and private replies omit cards',async()=>{
+  const agent=createAgent({url:'https://example.supabase.co',fetchImpl:async(_url,options)=>{
+    assert.equal(JSON.parse(options.body).privateMode,true);
+    return Response.json({reply:'Tasks only',alexa:{privateMode:true}});
+  }});
+  const out=await skill(agent).invoke(request({intent:'TasksIntent',attributes:{privateMode:true}}));
+  assert.equal(out.response.card,undefined);
+  assert.match(out.response.outputSpeech.ssml,/Tasks only/);
+});
