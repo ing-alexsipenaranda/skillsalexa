@@ -13,11 +13,18 @@ sudo systemctl start evoll-alexa-health.service
 sudo systemctl list-timers 'evoll-alexa-*'
 ```
 
-Para alertas, guarda `ALERT_WEBHOOK_URL` en `/etc/evoll-alexa-monitor.env`, propiedad
-root y permisos 600. Debe aceptar JSON con un campo `text`. La URL puede contener
-un secreto: no la guardes en Git ni la envíes al chat. El health check verifica
-que Docker indique `running healthy` y que HTTPS responda. Un fallo produce
-salida no cero y, si el webhook está configurado, envía un aviso genérico.
+El canal elegido es **Telegram**. Usa Python 3 del VPS y guarda
+`TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID` en `/etc/evoll-alexa-monitor.env`,
+propiedad root y permisos 600. Sigue [telegram-alerts.md](telegram-alerts.md)
+para crear el bot y activar el envío. El health check verifica que Docker indique
+`running healthy` y que HTTPS responda. Un fallo produce salida no cero y envía
+un aviso genérico, sin contenido de consultas ni datos del usuario.
+
+Si no hay variables Telegram configuradas, se conserva la alternativa
+`ALERT_WEBHOOK_URL` para un receptor JSON con campo `text`. No configures un
+token Telegram dentro de esa URL: el formato de Telegram requiere el remitente
+específico. Si Telegram falla, el monitor conserva el estado de fallo y registra
+un error genérico, sin imprimir el token ni la respuesta de la API.
 
 La comprobación corre cada cinco minutos. La copia diaria corre cerca de las
 04:00 UTC y conserva 14 días. Las copias son locales: añade un destino privado

@@ -113,5 +113,6 @@ porque podría duplicar el recordatorio. Su prueba de cierre debe incluir permis
 denegado, creación, consulta, cancelación y timeout con un Echo real.
 
 Contacto público confirmado: soporte@evoll.app. Incorporado en políticas, términos
-y fichas ES/EN; pendiente desplegar esas páginas. El canal de alertas operativas
-sigue sin definir.
+y fichas ES/EN; pendiente desplegar esas páginas. Canal de alertas operativas:
+Telegram. Remitente y pruebas locales preparados; pendiente guardar token/chat
+en el VPS, activar el temporizador y comprobar la entrega real.

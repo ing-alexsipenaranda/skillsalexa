@@ -55,6 +55,7 @@ write_tar(root / 'dist/evoll-docker.tar.gz', broker_files + common_files + [
     '.gitignore', '.env.compose.example', 'scripts/build.mjs',
     'scripts/backup-vps.sh', 'scripts/health-vps.sh', 'scripts/update-vps.sh',
     'scripts/verify-production.sh', 'src/index.js', 'src/hosted.js', 'src/agent.js',
+    'scripts/telegram-alert.py',
     'linking/index.html', 'linking/app.js', 'linking/privacy.html', 'linking/terms.html',
     'skill-package/interactionModels/custom/es-ES.json',
     'skill-package/interactionModels/custom/es-MX.json',

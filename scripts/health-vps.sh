@@ -9,7 +9,9 @@ echo "Container: $state"
 curl --fail --silent --show-error --max-time 10 https://alexa.evoll.app/health || failed=1
 echo
 if [[ "$failed" -ne 0 ]]; then
-  if [[ -n "${ALERT_WEBHOOK_URL:-}" ]]; then
+  if [[ -n "${TELEGRAM_BOT_TOKEN:-}${TELEGRAM_CHAT_ID:-}" ]]; then
+    python3 "$(dirname "$0")/telegram-alert.py" || true
+  elif [[ -n "${ALERT_WEBHOOK_URL:-}" ]]; then
     curl --fail --silent --show-error --max-time 10 -H 'Content-Type: application/json' \
       --data '{"text":"Evoll Alexa health check failed"}' "$ALERT_WEBHOOK_URL" >/dev/null || true
   fi

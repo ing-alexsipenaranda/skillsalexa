@@ -99,10 +99,28 @@ class OperationsTests(unittest.TestCase):
                 (root/name).chmod(0o755)
             for state in ['running healthy', 'exited healthy', 'running unhealthy', 'running starting']:
                 env = dict(os.environ, PATH=str(root)+':'+os.environ['PATH'], TEST_STATE=state,
-                           ALERT_WEBHOOK_URL='')
+                           ALERT_WEBHOOK_URL='', TELEGRAM_BOT_TOKEN='', TELEGRAM_CHAT_ID='')
                 result = subprocess.run(['bash', str(SOURCE/'scripts/health-vps.sh')],
                                         env=env, capture_output=True)
                 self.assertEqual(result.returncode == 0, state == 'running healthy')
+
+    def test_health_only_sends_telegram_on_failure_and_preserves_failure_status(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for name, code in {'docker':'echo "$TEST_STATE"', 'curl':'exit 0',
+                               'python3':'echo "$1" > "$TEST_LOG"\nexit 1'}.items():
+                (root/name).write_text('#!/bin/sh\n'+code+'\n')
+                (root/name).chmod(0o755)
+            for state in ['running healthy', 'exited unhealthy']:
+                env = dict(os.environ, PATH=str(root)+':'+os.environ['PATH'], TEST_STATE=state,
+                           ALERT_WEBHOOK_URL='', TELEGRAM_BOT_TOKEN='123:fake',
+                           TELEGRAM_CHAT_ID='456', TEST_LOG=str(root/'sent'))
+                result = subprocess.run(['bash', str(SOURCE/'scripts/health-vps.sh')],
+                                        env=env, capture_output=True)
+                self.assertEqual(result.returncode == 0, state == 'running healthy')
+                self.assertEqual((root/'sent').exists(), state != 'running healthy')
+                if (root/'sent').exists():
+                    self.assertTrue((root/'sent').read_text().strip().endswith('/telegram-alert.py'))
 
 if __name__ == '__main__':
     unittest.main()

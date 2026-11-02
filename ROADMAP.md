@@ -108,7 +108,8 @@ reintenta una solicitud.
 - [x] Documentar métricas seguras y lista de certificación.
 - [x] Documentar procedimiento de incidentes y rollback.
 - [x] Definir el correo público de soporte: soporte@evoll.app.
-- [ ] Configurar el canal de alertas operativas.
+- [x] Preparar Telegram como canal de alertas operativas.
+- [ ] Guardar token/chat en el VPS y confirmar entrega real de Telegram.
 - [ ] Solicitar certificación únicamente cuando el flujo personal sea estable.
 
 **Aceptación:** una instalación nueva puede operarse y recuperarse siguiendo la
